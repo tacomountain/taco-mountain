@@ -3,19 +3,22 @@ const User = require('../../lib/models/User');
 require('../utils/data-helper');
 
 describe('user', () => {
+  
   it('hashes the password at user creation', () => {
-    User.create({
-      username: 'beeftaco69',
+    return User.create({
+      name: 'beef taco 69',
       password: 'pw1234',
+      phone: '1234567890',
       role: 'admin'
     })
       .then(user => {
-        expect(user).toEqual({
-          username: 'beeftaco69',
+        expect(user.toJSON()).toEqual({
+          name: 'beef taco 69',
           role: 'admin',
+          phone: '1234567890',
           _id: expect.any(mongoose.Types.ObjectId),
-          passwordHash: expect.any(String)
         });
       });
   });
+
 });

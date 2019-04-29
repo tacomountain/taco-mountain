@@ -4,8 +4,9 @@ const Customer = require('../../lib/models/Customer');
 
 function seedUsers(userCount = 10) {
   const users = [...Array(userCount)].map(() => ({
-    username: chance.name(),
+    name: chance.name(),
     password: chance.animal(),
+    phone: chance.phone({ formatted: false }),
     role: 'customer'   
   }));
   return User.create(users);
@@ -14,8 +15,6 @@ function seedUsers(userCount = 10) {
 async function seedCustomers(customerCount = 10) {
   const users = await seedUsers();
   const customers = [...Array(customerCount)].map((_, i) => ({
-    displayName: chance.name(),
-    phoneNumber: chance.phone({ formatted: false }),
     user: users[i]._id
   }));
   return Customer.create(customers);
