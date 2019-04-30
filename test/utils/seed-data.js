@@ -5,7 +5,7 @@ const Customer = require('../../lib/models/Customer');
 function seedUsers(userCount = 10) {
   const users = [...Array(userCount)].map(() => ({
     name: chance.name(),
-    password: chance.animal(),
+    password: 'password123',
     phone: chance.phone({ formatted: false }),
     role: 'customer'   
   }));

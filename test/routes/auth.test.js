@@ -1,4 +1,4 @@
-require('../utils/data-helper');
+const { getUser } = require('../utils/data-helper');
 const request = require('supertest');
 const app = require('../../lib/app');
 
@@ -19,7 +19,7 @@ describe('auth route tests', () => {
       });
   });
 
-  it.only('signs up a customer', () => {
+  it('signs up a customer', () => {
     return request(app)
       .post('/api/v1/auth/signup/customer')
       .send({ name: 'customer dan', password: 'letMeIn', phone: '8888888888' })
@@ -37,8 +37,25 @@ describe('auth route tests', () => {
       });
   });
 
-  it('signs in a user', () => {
-    
+  it.only('signs in a user', () => {
+    return getUser()
+      .then(newUser => {
+        return request(app)
+          .post('/api/v1/auth/signin')
+          .send({ phone: newUser.phone, password: 'password123' });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          name: expect.any(String),
+          _id: expect.any(String),
+          profile: {
+            _id: expect.any(String),
+            rewards: 0
+          },
+          phone: expect.any(String),
+          role: 'customer'
+        });
+      });
   });
 
 });
