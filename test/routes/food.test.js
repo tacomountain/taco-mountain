@@ -1,5 +1,6 @@
 require('dotenv').config();
-const { getAdminAgent, getCustomerAgent } = require('../utils/data-helper');
+const { getAdminAgent, getFood } = require('../utils/data-helper');
+
 
 describe('food routes', () => {
 
@@ -29,6 +30,17 @@ describe('food routes', () => {
       .get('/api/v1/food')
       .then(res => {
         expect(res.body).toHaveLength(20);
+      });
+  });
+
+  it('gets a food by id', () => {
+    return getFood()
+      .then(food => {
+        return getAdminAgent()
+          .get(`/api/v1/food/${food._id}`)
+          .then(res => {
+            expect(res.body).toEqual(food);
+          });
       });
   });
 

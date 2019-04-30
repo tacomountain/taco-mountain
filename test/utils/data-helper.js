@@ -5,6 +5,8 @@ const seedData = require('./seed-data');
 const User = require('../../lib/models/User');
 const app = require('../../lib/app');
 const request = require('supertest');
+const Food = require('../../lib/models/Food');
+
 
 
 beforeAll(() => {
@@ -45,6 +47,7 @@ const createGetters = Model => ({
 
 module.exports = {
   ...createGetters(User),
+  ...createGetters(Food),
   getAdminAgent: () => adminAgent,
   getCustomerAgent: () => customerAgent
 };
