@@ -2,6 +2,7 @@ require('dotenv').config();
 const { getAdminAgent, getCustomerAgent } = require('../utils/data-helper');
 
 describe('food routes', () => {
+
   it('creates a food', () => {
     return getAdminAgent()
       .post('/api/v1/food')
@@ -19,7 +20,18 @@ describe('food routes', () => {
           unitCost: 0.25,
           image: 'https://creativeconnections.org/wp-content/uploads/2015/07/MEX-14-075-e1437626610793.jpg',
           _id: expect.any(String)
-        })
+        });
       });
   });
+
+  it('gets a list of food', () => {
+    return getAdminAgent()
+      .get('/api/v1/food')
+      .then(res => {
+        expect(res.body).toHaveLength(20);
+      });
+  });
+
+
+  
 });
