@@ -77,4 +77,30 @@ describe('auth route tests', () => {
         });
       });
   });
+
+  it('errors on signin with non existing acc', () => {
+    return request(app)
+      .post('/api/v1/auth/signin')
+      .send({ phone: '2345678901', password: 'sneakyPhrase32' })
+      .then(res => {
+        expect(res.body).toEqual({
+          error: 'Invalid login'
+        });
+      });
+  });
+
+  it('errors on signin with bad password', () => {
+    return getUser()
+      .then(newUser => {
+        return request(app)
+          .post('/api/v1/auth/signin')
+          .send({ phone: newUser.phone, password: 'password12' });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          error: 'Invalid login'
+        });
+      });
+  });
+
 });
