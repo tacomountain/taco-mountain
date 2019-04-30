@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const connect = require('../../lib/utils/connect');
 const seedData = require('./seed-data');
 const User = require('../../lib/models/User');
+const app = require('../../lib/app');
+const request = require('supertest');
+
 
 beforeAll(() => {
   return connect();
@@ -14,6 +17,20 @@ beforeEach(() => {
 
 beforeEach(() => {
   return seedData();
+});
+
+const adminAgent = request.agent(app);
+beforeEach(() => {
+  return adminAgent
+    .post('/api/v1/auth/signup/admin')
+    .send({ name: 'Anna', phone: '9999999999', password: 'password' });
+});
+
+const customerAgent = request.agent(app);
+beforeEach(() => {
+  return customerAgent
+    .post('/api/v1/auth/signup/customer')
+    .send({ name: 'Naan', phone: '9999999999', password: 'password' });
 });
 
 afterAll(() => {
@@ -28,4 +45,6 @@ const createGetters = Model => ({
 
 module.exports = {
   ...createGetters(User),
+  getAdminAgent: () => adminAgent,
+  getCustomerAgent: () => customerAgent
 };
