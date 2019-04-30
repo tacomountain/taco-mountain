@@ -37,7 +37,7 @@ describe('auth route tests', () => {
       });
   });
 
-  it.only('signs in a user', () => {
+  it('signs in a customer', () => {
     return getUser()
       .then(newUser => {
         return request(app)
@@ -58,4 +58,23 @@ describe('auth route tests', () => {
       });
   });
 
+  it('signs in an admin', () => {
+    return request(app)
+      .post('/api/v1/auth/signup/admin')
+      .send({ name: 'taco dan', password: 'sneakyPhrase32', phone: '2345678901' })
+      .then(() => {
+        return request(app)
+          .post('/api/v1/auth/signin')
+          .send({ phone: '2345678901', password: 'sneakyPhrase32' });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          name: 'taco dan',
+          _id: expect.any(String),
+          profile: null,
+          phone: '2345678901',
+          role: 'admin'
+        });
+      });
+  });
 });
