@@ -44,6 +44,30 @@ describe('food routes', () => {
       });
   });
 
+  it('patches a food by id', () => {
+    return getFood()
+      .then(food => {
+        return getAdminAgent()
+          .patch(`/api/v1/food/${food._id}`)
+          .send({
+            name: 'Horchata Taco',
+            price: 4.45,
+            unitCost: 1,
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              name: 'Horchata Taco',
+              price: 4.45,
+              unitCost: 1,
+              type: food.type, 
+              image: food.image,
+              _id: expect.any(String)
+            });
+          });
+      });
+  });
+
+  
 
   
 });
