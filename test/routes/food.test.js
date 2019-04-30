@@ -67,7 +67,23 @@ describe('food routes', () => {
       });
   });
 
-  
+  it('cen delete a food', () => {
+    return getFood()
+      .then(food => {
+        return getAdminAgent()
+          .delete(`/api/v1/food/${food._id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          name: expect.any(String),
+          price: expect.any(Number),
+          unitCost: expect.any(Number),
+          type: expect.any(String), 
+          image: expect.any(String),
+          _id: expect.any(String)
+        });
+      });
+  });
 
   
 });
