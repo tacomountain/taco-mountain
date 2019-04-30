@@ -6,7 +6,7 @@ var signInSignUp = [
     type: 'list',
     name: 'signInSignUp',
     message: 'Sign in Or Sign Up',
-    choices: ['Admin', new inquirer.Separator(), 'Customer']
+    choices: ['Sign In', 'Sign Up']
   }
 ];
 
@@ -25,7 +25,7 @@ var signUp = [
     type: 'list',
     name: 'role',
     message: 'Choose a password?',
-    choices: ['Admin', new inquirer.Separator(), 'Customer']
+    choices: ['Admin', 'Customer']
   },
   {
     type: 'input',
@@ -92,7 +92,7 @@ var order = [
 var adminChoices = [
   {
     type: 'list',
-    name: 'role',
+    name: 'adminChoice',
     message: 'Choose a password?',
     choices: ['Edit Menu', 'Analytics']
   }
@@ -105,7 +105,7 @@ var editMenu = [
     type: 'list',
     name: 'how_to_edit',
     message: 'What do you want to edit the menu?',
-    choices: ['Add Item', 'Remove Menu Item', 'Update Menu Item', 'Back to Admin']
+    choices: ['Add Item', 'Remove Item', 'Update Item', 'Back to Admin']
   }
 ];
 
@@ -180,11 +180,51 @@ var analytics = [
 ];
 
 
-inquirer.prompt(signin).then(user => {
-  if(user.user_type === 'Customer') {
-    inquirer.prompt(order).then(order => {
-      console.log(JSON.stringify(order, null, '  '));
+inquirer.prompt(signInSignUp).then(sisu => {
+
+  if(sisu.signInSignUp === 'Sign Up') {
+    inquirer.prompt(signUp).then(newUser => {
+      if(newUser.role === 'Customer') {
+        inquirer.prompt(order).then(order => {
+          console.log((order));
+        });
+      }
+    
     });
-  } else { console.log('thanks');}
-  
+  }
+
+  if(sisu.signInSignUp === 'Sign Up') {
+    inquirer.prompt(signin).then(retUser => {
+      inquirer.prompt(signUp).then(newUser => {
+        if(newUser.role === 'Admin') {
+          inquirer.prompt(adminChoices).then(adminChoice => {
+            
+            
+            if(adminChoice.adminChoice === 'Edit Menu') {
+              inquirer.prompt(editMenu).then(editChoice => {
+                if(editChoice.how_to_edit === 'Add Item') {
+                  inquirer.prompt(addMenuItem).then(newItem => {
+                    console.log(newItem);
+                  });
+                }
+                if(editChoice.how_to_edit === 'Remove Item') {
+                  inquirer.prompt(removeItem).then(removedItem => {
+                    console.log(removeItem);
+                  });
+                }
+                if(editChoice.how_to_edit === 'Update Item') {
+                  inquirer.prompt(updateItem).then(itemToUpdate => {
+                    console.log(itemToUpdate);
+                  });
+                }
+
+              });
+            }
+            
+          });
+        }
+      });
+
+    });
+  }
 });
