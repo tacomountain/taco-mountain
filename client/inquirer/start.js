@@ -50,11 +50,10 @@ const signUpPrompt = () =>
             .post('http://localhost:7890/api/v1/auth/signup/admin')
             .send({
               name: response.name,
-              role: response.role,
+              // role: response.role,
               password: response.password,
               phone: response.phone
-            })
-            .then(res => console.log(res.body));
+            });
           adminMenu();
           break;
         case 'Customer':

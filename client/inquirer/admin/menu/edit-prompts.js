@@ -12,7 +12,7 @@ const addMenuItemQs = [
     type: 'list',
     name: 'type',
     message: 'What type of menu item',
-    choices: ['Appetizer', 'Entre', 'Dessert', 'Drink']
+    choices: ['appetizer', 'Entre', 'Dessert', 'Drink']
   },
   {
     type: 'input',
@@ -72,14 +72,18 @@ const updateMenuItemQs = [
   }
 ];
 
-const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({type, name, price, unitCost, image, confirm_order}) => {
+const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({ type, name, price, unitCost, image, confirm_order }) => {
+  
   if(confirm_order) {
-    request.post('http://localhost:7890/api/v1/food')
+    return request.post('http://localhost:7890/api/v1/food')
       .send({ name, type, price, unitCost, image })
-      .then(res => console.log(res))
-      .then(() => require('./edit-menu')());
+      .then(() => {
+        console.log('here');
+        require('./edit-menu')();})
+      .catch('message');
+  } else {
+    require('./edit-menu')();
   }
-  require('./edit-menu')();
 });
 
 const removeItemPrompt = () => inquirer.prompt(removeMenuItemQs).then(newItem => {
