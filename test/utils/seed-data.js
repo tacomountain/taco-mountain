@@ -4,7 +4,7 @@ const Customer = require('../../lib/models/Customer');
 const Food = require('../../lib/models/Food');
 const Order = require('../../lib/models/Order');
 
-function seedUsers(userCount = 10) {
+function seedUsers(userCount = 20) {
   const users = [...Array(userCount)].map(() => ({
     name: chance.name(),
     password: 'password123',
@@ -14,10 +14,11 @@ function seedUsers(userCount = 10) {
   return User.create(users);
 }
 
-async function seedCustomers(customerCount = 10) {
+async function seedCustomers(customerCount = 20) {
   const users = await seedUsers();
   const customers = [...Array(customerCount)].map((_, i) => ({
-    user: users[i]._id
+    user: users[i]._id,
+    rewards: chance.integer({ min: 0, max: 10 })
   }));
   return Customer.create(customers);
 }

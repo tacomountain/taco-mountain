@@ -50,7 +50,7 @@ describe('auth route tests', () => {
           _id: expect.any(String),
           profile: {
             _id: expect.any(String),
-            rewards: 0
+            rewards: expect.any(Number)
           },
           phone: expect.any(String),
           role: 'customer'
