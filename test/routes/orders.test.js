@@ -64,4 +64,26 @@ describe('order routes', () => {
       });
   });
 
+  it('gets a list of profits by food item', () => {
+    return getAdminAgent()
+      .get('/api/v1/orders/profitsByFood')
+      .then(res => {
+        for(let i = 0; i < res.body.length - 1; i++) {
+          expect(res.body[i]).toEqual({
+            totalSale: expect.any(Number),
+            count: expect.any(Number),
+            totalProfit: expect.any(Number),
+            item: {
+              _id: expect.any(String),
+              name: expect.any(String),
+              price: expect.any(Number),
+              type: expect.any(String),
+              unitCost: expect.any(Number),
+              image: expect.any(String)
+            }
+          });
+          expect(res.body[i].totalProfit).toBeGreaterThanOrEqual(res.body[i + 1].totalProfit);
+        }
+      });
+  });
 });

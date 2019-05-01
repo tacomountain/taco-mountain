@@ -52,4 +52,3 @@ async function seedOrders(orderCount = 100) {
 }
 
 module.exports = seedOrders;
-
