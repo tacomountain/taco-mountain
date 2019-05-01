@@ -1,20 +1,12 @@
 const inquirer = require('inquirer');
-const adminMenu = require('./admin-menu');
 
 const apps = ['Chips and Salsa', 'Chips and Guacamole', 'Loaded Nachos'];
 const tacos = ['Beef', 'Chicken', 'Vegan'];
 const dessert = ['Cookies', 'Marg', 'Brownie'];
 
-const editMenu = [
-  {
-    type: 'list',
-    name: 'task',
-    message: 'How do you want to edit the menu?',
-    choices: ['Add Item', 'Remove Item', 'Update Item', 'Back to Admin']
-  }
-];
 
-const addMenuItem = [
+
+const addMenuItemQs = [
   {
     type: 'list',
     name: 'type',
@@ -43,7 +35,7 @@ const addMenuItem = [
   }
 ];
 
-const removeItem = [
+const removeMenuItemQs = [
   {
     type: 'checkbox',
     message: 'select items to remove from menu',
@@ -61,7 +53,7 @@ const removeItem = [
   }
 ];
 
-const updateItem = [
+const updateMenuItemQs = [
   {
     type: 'list',
     message: 'Choose an item to update',
@@ -74,25 +66,23 @@ const updateItem = [
   }
 ];
 
-module.exports = () => inquirer.prompt(editMenu).then(task => {
-  switch(task.task) {
-    case 'Add Item':
-      inquirer.prompt(addMenuItem).then(newItem => {
-        console.log(newItem);
-      });
-      break;
-    case 'Remove Item':
-      inquirer.prompt(removeItem).then(removedItem => {
-        console.log(removedItem);
-      });
-      break;
-    case 'Update Item':
-      inquirer.prompt(updateItem).then(updatedItem => {
-        console.log(updatedItem);
-      });
-      break;
-    case 'Back to Admin':
-      adminMenu();
-      break;
-  }
+const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(newItem => {
+  console.log(newItem);
+  require('./edit-menu')();
 });
+
+const removeItemPrompt = () => inquirer.prompt(removeMenuItemQs).then(newItem => {
+  console.log(newItem);
+  require('./edit-menu')();
+});
+
+const updateItemPrompt = () => inquirer.prompt(updateMenuItemQs).then(newItem => {
+  console.log(newItem);
+  require('./edit-menu')();
+});
+
+module.exports = {
+  addItemPrompt,
+  removeItemPrompt,
+  updateItemPrompt
+};

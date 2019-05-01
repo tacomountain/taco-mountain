@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
-const adminMenu = require('./admin-menu');
-const customerMenu = require('./customer-menu');
+const adminMenu = require('./admin/admin-menu');
+const customerMenu = require('./customer/customer-menu');
 
 const signUp = [
   {
@@ -42,6 +42,7 @@ const signIn = [
 const signUpPrompt = () => 
   inquirer.prompt(signUp)
     .then(response => {
+      console.log(response);
       switch(response.role) {
         case 'Admin':
           adminMenu();
@@ -50,7 +51,6 @@ const signUpPrompt = () =>
           customerMenu();
           break;
       }
-      console.log(response);
     });
 
 

@@ -1,24 +1,22 @@
 const inquirer = require('inquirer');
-const editMenu = require('./edit-menu');
-const analytics = require('./analytics');
 
 var adminTasks = [
   {
     type: 'list',
     name: 'adminTask',
-    message: 'Choose a password?',
+    message: 'What will you do?',
     choices: ['Edit Menu', 'Analytics']
   }
 ];
 
-
 module.exports = () => inquirer.prompt(adminTasks).then(task => {
-  switch(task.adminTasks) {
+  switch(task.adminTask) {
     case 'Edit Menu':
-      editMenu();
+      require('./menu/edit-menu')();
       break;
     case 'Analytics':
-      analytics();
+      require('./analytics/analytics')();
       break;
   }
 });
+
