@@ -63,4 +63,14 @@ describe('order routes', () => {
         expect(res.body).toHaveLength(100);
       });
   });
+
+  it('gets total sales', () => {
+    return getAdminAgent()
+      .get('/api/v1/orders/totalSales')
+      .then(res => {
+        expect(res.body).toEqual([{
+          total: expect.any(Number)
+        }]);
+      });
+  });
 });
