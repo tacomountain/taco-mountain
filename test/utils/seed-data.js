@@ -44,12 +44,11 @@ async function seedOrders(orderCount = 100) {
       { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price },
       { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price }
     ],
-    subtotal: chance.integer(),
-    tip: chance.integer(),
-    total: chance.integer()
+    subtotal: chance.integer({ min: 0 }),
+    tip: chance.integer({ min: 0 }),
+    total: chance.integer({ min: 0 })
   }));
   return Order.create(orders);
 }
 
 module.exports = seedOrders;
-
