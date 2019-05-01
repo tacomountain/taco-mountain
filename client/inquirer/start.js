@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
 const request = require('superagent');
+const agent = require('./requester');
 
 const signUp = [
   {
@@ -43,18 +44,19 @@ const signIn = [
 const signUpPrompt = () => 
   inquirer.prompt(signUp)
     .then(response => {
-      console.log(response);
       switch(response.role) {
         case 'Admin':
-          request
+          agent()
             .post('http://localhost:7890/api/v1/auth/signup/admin')
             .send({
               name: response.name,
               // role: response.role,
               password: response.password,
               phone: response.phone
+            })
+            .then(() => {
+              adminMenu();
             });
-          adminMenu();
           break;
         case 'Customer':
           customerMenu();

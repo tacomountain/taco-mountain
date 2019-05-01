@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const request = require('superagent');
+const agent = require('../../requester');
 
 const apps = ['Chips and Salsa', 'Chips and Guacamole', 'Loaded Nachos'];
 const tacos = ['Beef', 'Chicken', 'Vegan'];
@@ -73,14 +74,13 @@ const updateMenuItemQs = [
 ];
 
 const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({ type, name, price, unitCost, image, confirm_order }) => {
-  
   if(confirm_order) {
-    return request.post('http://localhost:7890/api/v1/food')
+    return agent()
+      .post('http://localhost:7890/api/v1/food')
       .send({ name, type, price, unitCost, image })
       .then(() => {
-        console.log('here');
         require('./edit-menu')();})
-      .catch('message');
+      .catch();
   } else {
     require('./edit-menu')();
   }
