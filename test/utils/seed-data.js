@@ -44,9 +44,9 @@ async function seedOrders(orderCount = 100) {
       { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price },
       { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price }
     ],
-    subtotal: chance.integer(),
-    tip: chance.integer(),
-    total: chance.integer()
+    subtotal: chance.integer({ min: 1, max: 40 }),
+    tip: chance.integer({ min: 1, max: 10 }),
+    total: chance.integer({ min: 1, max: 40 })
   }));
   return Order.create(orders);
 }
