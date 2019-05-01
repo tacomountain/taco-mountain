@@ -32,7 +32,7 @@ const customerAgent = request.agent(app);
 beforeEach(() => {
   return customerAgent
     .post('/api/v1/auth/signup/customer')
-    .send({ name: 'Naan', phone: '9999999999', password: 'password' });
+    .send({ name: 'Naan', phone: '1112223333', password: 'password' });
 });
 
 afterAll(() => {
