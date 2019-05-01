@@ -2,6 +2,7 @@ const chance = require('chance').Chance();
 const User = require('../../lib/models/User');
 const Customer = require('../../lib/models/Customer');
 const Food = require('../../lib/models/Food');
+const Order = require('../../lib/models/Order');
 
 function seedUsers(userCount = 10) {
   const users = [...Array(userCount)].map(() => ({
@@ -32,8 +33,22 @@ function seedFood(foodCount = 20) {
   return Food.create(food);
 }
 
-module.exports = () => {
-  seedCustomers();
-  seedFood();
-};
+async function seedOrders(orderCount = 100) {
+  const customers = await seedCustomers();
+  const food = await seedFood();
+  const orders = [...Array(orderCount)].map(() => ({
+    customer: chance.pickone(customers)._id,
+    food: [
+      { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price },
+      { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price },
+      { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price }
+    ],
+    subtotal: chance.integer(),
+    tip: chance.integer(),
+    total: chance.integer()
+  }));
+  return Order.create(orders);
+}
+
+module.exports = seedOrders;
 

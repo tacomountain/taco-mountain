@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { getCustomerAgent, getFood } = require('../utils/data-helper');
+const { getCustomerAgent, getAdminAgent, getFood } = require('../utils/data-helper');
 
 describe('order routes', () => {
   it('can create an order', async() => {
@@ -54,5 +54,13 @@ describe('order routes', () => {
       _id: res.body.order.customer,
       rewards: 1
     });
+  });
+
+  it('gets all orders', () => {
+    return getAdminAgent()
+      .get('/api/v1/orders')
+      .then(res => {
+        expect(res.body).toHaveLength(100);
+      });
   });
 });
