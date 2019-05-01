@@ -57,7 +57,7 @@ const apps = ['Chips and Salsa', 'Chips and Guacamole', 'Loaded Nachos'];
 const tacos = ['Beef', 'Chicken', 'Vegan'];
 const dessert = ['Cookies', 'Marg', 'Brownie'];
 
-var order = [
+const order = [
   {
     type: 'checkbox',
     message: 'select food',
