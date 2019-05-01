@@ -1,4 +1,5 @@
 const inquirer = require('inquirer');
+const request = require('superagent');
 
 const apps = ['Chips and Salsa', 'Chips and Guacamole', 'Loaded Nachos'];
 const tacos = ['Beef', 'Chicken', 'Vegan'];
@@ -11,7 +12,7 @@ const addMenuItemQs = [
     type: 'list',
     name: 'type',
     message: 'What type of menu item',
-    choices: ['App', 'Entre', 'Dessert', 'Drink']
+    choices: ['Appetizer', 'Entre', 'Dessert', 'Drink']
   },
   {
     type: 'input',
@@ -22,6 +23,11 @@ const addMenuItemQs = [
     type: 'number',
     name: 'price',
     message: 'Set price:'
+  },
+  {
+    type: 'number',
+    name: 'unitCost',
+    message: 'Unit Cost'
   },
   {
     type: 'input',
@@ -66,8 +72,13 @@ const updateMenuItemQs = [
   }
 ];
 
-const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(newItem => {
-  console.log(newItem);
+const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({type, name, price, unitCost, image, confirm_order}) => {
+  if(confirm_order) {
+    request.post('http://localhost:7890/api/v1/food')
+      .send({ name, type, price, unitCost, image })
+      .then(res => console.log(res))
+      .then(() => require('./edit-menu')());
+  }
   require('./edit-menu')();
 });
 
