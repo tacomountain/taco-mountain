@@ -1,7 +1,6 @@
 const inquirer = require('inquirer');
 const adminMenu = require('../admin-menu');
-const agent = require('../../requester');
-const { topRewards, topSpenders, popularItems, profitableItems } = require('./analytics-methods');
+const { topRewards, topSpenders, popularItems, profitableItems, totalSales } = require('./analytics-methods');
 
 const aggregationQs = [
   {
@@ -13,6 +12,7 @@ const aggregationQs = [
       'Customers who have spent the most',
       'Most popular menu items',
       'Most profitable menu items',
+      'Total Sales',
       'Back to Admin'
     ]
   }
@@ -31,6 +31,9 @@ module.exports = () => inquirer.prompt(aggregationQs).then(choice => {
       break;
     case 'Most profitable menu items':
       profitableItems();
+      break;
+    case 'Total Sales':
+      totalSales();
       break;
     case 'Back to Admin':
       adminMenu();
