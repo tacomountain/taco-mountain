@@ -16,6 +16,12 @@ module.exports = async(user) => {
     .then(({ order }) => {
       const subtotal = order.reduce((acc, cur) => acc + cur.price, 0);
 
+      const orders = order.map(({ _id, name, price }) => ({
+        foodId: _id,
+        name,
+        purchasePrice: price
+      }));
+
       const tipQ = {
         type: 'number',
         name: 'tip',
@@ -29,7 +35,7 @@ module.exports = async(user) => {
           const confirmQ = {
             type: 'confirm',
             name: 'confirmation',
-            message: `Your total is ${total.toFixed(2)}. Would you like to place this order?`
+            message: `Your total is $${total.toFixed(2)}. Would you like to place this order?`
           };
 
           return inquirer.prompt(confirmQ)
@@ -38,31 +44,14 @@ module.exports = async(user) => {
                 return agent()
                   .post('http://localhost:7890/api/v1/orders')
                   .send({
-                    // food: foodArray,
+                    food: orders,
                     subtotal: subtotal,
                     tip: tip,
                     total: total
                   });
               }
-              // switch(choice.confirm_order) {
-              //   case true:
-              //     return agent()
-              //       .post('http://localhost:7890/api/v1/orders')
-              //       .send({
-              //         food: foodArray,
-              //         subtotal: subtotal,
-              //         tip: tip,
-              //         total: total
-              //       })
-              //       .then(order => {
-              //         console.log(order.body);
-              //         //what next?
-              //       });
-              //   case false:
-              //     console.log('cancelled');
-              //   //back to menu
-              // }
             });
         });
-    });
+    })
+    .then(() => console.log('Thank you for coming to Taco Mountain!'));
 };
