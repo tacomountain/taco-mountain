@@ -1,7 +1,5 @@
 const inquirer = require('inquirer');
-const request = require('superagent');
 const agent = require('../../requester');
-const Food = require('../../../../lib/models/Food');
 
 const addMenuItemQs = [
   {
