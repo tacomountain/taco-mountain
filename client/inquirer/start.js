@@ -1,20 +1,28 @@
 const inquirer = require('inquirer');
 const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
-const request = require('superagent');
 const agent = require('./requester');
 
-const signUp = [
-  {
-    type: 'input',
-    name: 'name',
-    message: 'Enter your name',
-  },
+const signUpQs = [
   {
     type: 'list',
     name: 'role',
     message: 'Choose a role:',
-    choices: ['Admin', 'Customer']
+    choices: [
+      {
+        name: 'Admin',
+        value: 'admin'
+      },
+      {
+        name: 'Customer',
+        value: 'customer'
+      }
+    ]
+  },
+  {
+    type: 'input',
+    name: 'name',
+    message: 'Enter your name',
   },
   {
     type: 'input',
@@ -28,7 +36,7 @@ const signUp = [
   }
 ];
 
-const signIn = [
+const signInQs = [
   {
     type: 'input',
     name: 'phone',
@@ -41,37 +49,31 @@ const signIn = [
   }
 ];
 
-const signUpPrompt = () => 
-  inquirer.prompt(signUp)
-    .then(response => {
-      switch(response.role) {
-        case 'Admin':
-          agent()
-            .post('http://localhost:7890/api/v1/auth/signup/admin')
-            .send({
-              name: response.name,
-              // role: response.role,
-              password: response.password,
-              phone: response.phone
-            })
-            .then(() => {
-              adminMenu();
-            });
-          break;
-        case 'Customer':
-          customerMenu();
-          break;
-      }
-    });
+function handleRole(role) {
+  switch(role) {
+    case 'admin':
+      return adminMenu();
+    case 'customer':
+      return customerMenu();
+  }
+}
 
-
-
-
-
-const signInPrompt = () => 
-  inquirer.prompt(signIn)
-    .then(response => {
-      console.log(response);
-    });
+const signInPrompt = () =>
+  inquirer.prompt(signInQs)
+    .then(answers => 
+      agent()
+        .post('http://localhost:7890/api/v1/auth/signin')
+        .send(answers)
+        .then(res => handleRole(res.body.role))
+    );
+    
+const signUpPrompt = () =>
+  inquirer.prompt(signUpQs)
+    .then(({ role, name, phone, password }) =>
+      agent()
+        .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
+        .send({ name, password, phone })
+        .then(() => handleRole(role))
+    );
 
 module.exports = { signInPrompt, signUpPrompt };
