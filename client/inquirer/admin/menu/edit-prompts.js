@@ -7,7 +7,6 @@ const tacos = ['Beef', 'Chicken', 'Vegan'];
 const dessert = ['Cookies', 'Marg', 'Brownie'];
 
 
-
 const addMenuItemQs = [
   {
     type: 'list',
@@ -45,7 +44,7 @@ const addMenuItemQs = [
 const removeMenuItemQs = [
   {
     type: 'checkbox',
-    message: 'select items to remove from menu',
+    message: 'Select items to remove from menu',
     name: 'remove_items',
     choices: [
       new inquirer.Separator('APPETIZERS'), ...apps,
@@ -56,7 +55,7 @@ const removeMenuItemQs = [
   {
     type: 'confirm',
     name: 'confirm_order',
-    message: 'Would you like to these item(s)?'
+    message: 'Would you like to remove these item(s)?'
   }
 ];
 

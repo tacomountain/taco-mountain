@@ -106,7 +106,7 @@ describe('order routes', () => {
         }
       });
   });
-  it.only('gets top three menu items', () => {
+  it('gets top three menu items', () => {
     return getAdminAgent()
       .get('/api/v1/orders/topMenuItems')
       .then(res => {
