@@ -36,6 +36,16 @@ module.exports = async(user) => {
       foodArray.forEach(food => {
         prices.push(food.price);
       });
+      foodArray.forEach(food => {
+        delete food.name;
+        delete food.type;
+        delete food.unitCost;
+        delete food.image;
+        food.foodItem = food._id;
+        food.purchasePrice = food.price;
+        delete food._id;
+        delete food.price;
+      });
       const reducer = (accumulator, currentValue) => accumulator + currentValue;
       const subtotal = Number((prices.reduce(reducer)).toFixed(2));
 
@@ -47,7 +57,8 @@ module.exports = async(user) => {
 
       inquirer.prompt(tipPrompt)
         .then(response => {
-          const total = Number(response.tip) + subtotal;
+          const tip = Number(response.tip);
+          const total = tip + subtotal;
 
           const confirmPrompt =   {
             type: 'confirm',
@@ -56,19 +67,26 @@ module.exports = async(user) => {
           };
           inquirer.prompt(confirmPrompt) 
             .then(choice => {
-                switch(choice.confirm_order) {
-                    case true:
-                    agent()
+              switch(choice.confirm_order) {
+                case true:
+                  return agent()
                     .post('http://localhost:7890/api/v1/orders')
                     .send({
-                        
+                      food: foodArray,
+                      subtotal: subtotal,
+                      tip: tip,
+                      total: total
                     })
-                        .then(() => {
-                            orderPlaced();
-                        })
-                    case false:
-                        cancelOrder();
-            })
+                    .then(() => {
+                      console.log(order.body);
+                      //what next?
+                    });
+                case false:
+                  console.log('cancelled');
+                  //back to menu
+                
+              }
+            });
         });
     });
 };
