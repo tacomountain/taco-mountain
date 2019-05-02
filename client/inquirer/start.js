@@ -51,12 +51,12 @@ const signInQs = [
   }
 ];
 
-function handleRole(role) {
-  switch(role) {
+function handleRole(user) {
+  switch(user.role) {
     case 'admin':
       return adminMenu();
     case 'customer':
-      return customerMenu();
+      return customerMenu(user);
   }
 }
 
@@ -68,6 +68,7 @@ const signInPrompt = () =>
         .send(answers)
         .then(res => {
           if(res.body.status === 401) {
+            // eslint-disable-next-line no-console
             console.log(chalk.red('invalid authorization'));
             require('../client')();
           }
@@ -81,7 +82,7 @@ const signUpPrompt = () =>
       agent()
         .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
         .send({ name, password, phone })
-        .then(() => handleRole(role))
+        .then(res => handleRole(res.body))
     );
 
 module.exports = { signInPrompt, signUpPrompt };

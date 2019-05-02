@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
-const agent = require('../../requester');
 const chalk = require('chalk');
+const agent = require('../../utils/requester');
 
 function topRewards() {
   return agent()
