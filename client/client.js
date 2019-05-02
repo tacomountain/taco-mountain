@@ -11,7 +11,7 @@ const startQs = [
   }
 ];
 
-inquirer.prompt(startQs).then(response => {
+const client = () => inquirer.prompt(startQs).then(response => {
   switch(response.start) {
     case 'Sign In': 
       signInPrompt();
@@ -21,3 +21,5 @@ inquirer.prompt(startQs).then(response => {
       break;
   }
 });
+
+module.exports = client;

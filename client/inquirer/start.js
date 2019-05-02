@@ -3,6 +3,8 @@ const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
 const agent = require('./requester');
 
+
+
 const signUpQs = [
   {
     type: 'list',
@@ -64,7 +66,13 @@ const signInPrompt = () =>
       agent()
         .post('http://localhost:7890/api/v1/auth/signin')
         .send(answers)
-        .then(res => handleRole(res.body.role))
+        .then(res => {
+          if(res.body.status === 401) {
+            console.log('invalid authorization');
+            require('../client')();
+          }
+          handleRole(res.body.role);
+        })
     );
     
 const signUpPrompt = () =>
