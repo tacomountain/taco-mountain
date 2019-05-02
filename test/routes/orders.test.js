@@ -9,15 +9,18 @@ describe('order routes', () => {
       .send({
         food: [
           {
-            foodItem: food1._id,
+            foodId: food1._id,
+            name: food1.name,
             purchasePrice: food1.price
           },
           {
-            foodItem: food2._id,
+            foodId: food2._id,
+            name: food2.name,
             purchasePrice: food2.price
           },
           {
-            foodItem: food3._id,
+            foodId: food3._id,
+            name: food3.name,
             purchasePrice: food3.price
           }
         ],
@@ -31,15 +34,18 @@ describe('order routes', () => {
       _id: expect.any(String),
       customer: expect.any(String),
       food: [{
-        foodItem: food1._id,
+        foodId: food1._id,
+        name: food1.name,
         purchasePrice: food1.price
       },
       {
-        foodItem: food2._id,
+        foodId: food2._id,
+        name: food2.name,
         purchasePrice: food2.price
       },
       {
-        foodItem: food3._id,
+        foodId: food3._id,
+        name: food3.name,
         purchasePrice: food3.price
       }],
       subtotal: food1.price + food2.price + food3.price,
