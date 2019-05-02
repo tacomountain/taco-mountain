@@ -152,7 +152,7 @@ const updateItemPrompt = async() => {
     {
       type: 'number',
       message: 'New cost of item:',
-      name: 'newUnitPrice'
+      name: 'newUnitCost'
     }
   ];
 
@@ -160,54 +160,50 @@ const updateItemPrompt = async() => {
     {
       type: 'input',
       message: 'Enter new image url:',
-      name: 'newPrice'
+      name: 'updateImage'
     }
   ];
   
   // udpate item logic
   return inquirer.prompt(updateMenuItemQs).then(results => {
-    console.log(results);
+    console.log('results', results);
 
-    // get obj to update
-    let foodToUpdate = foodList.body.filter(foodObj => {
+    const foodToUpdate = foodList.body.filter(foodObj => {
       if(foodObj.name === results.item_to_update) {
-        console.log(foodObj);
+        console.log('food obj', foodObj);
         return foodObj;
       }
     });
 
-    // updates price
     if(results.updateFields.includes('Price')) {
-      inquirer.prompt(updatePriceQs).then(newPrice => {
-        foodToUpdate.price = newPrice;
-      });
-    }
-    
-    // updates unit cost
-    if(results.updateFields.includes('Unit Cost')) {
-      inquirer.prompt(updateUnitPriceQs).then(newUnitCost => {
-        foodToUpdate.unitCost = newUnitCost;
-      });
-    }
-    
-    // updates unit cimage
-    if(results.updateFields.includes('Image')) {
-      inquirer.prompt(updateImageQs).then(newImage => {
-        foodToUpdate.image = newImage;
-      });
-    }
-    return foodToUpdate;
-  })
-    .then(newFoodObj => {
-      console.log(newFoodObj);
-      return agent()
-        .patch(`http://localhost:7890/api/v1/food/${newFoodObj._id}`)
-        .send(newFoodObj)
+      return inquirer.prompt(updatePriceQs).then(newPrice => {
+        foodToUpdate[0].price = newPrice.newPrice;
+      })
         .then(() => {
-          console.log('Your new menu item', newFoodObj);
-        });
-    })
-    .then(() => require('./edit-menu')());
+          // updates unit cost
+          if(results.updateFields.includes('Unit Cost')) {
+            return inquirer.prompt(updateUnitPriceQs).then(newUnitCost => {
+              foodToUpdate[0].unitCost = newUnitCost.newUnitCost;
+            });
+          }
+        }).then(() => {
+          if(results.updateFields.includes('Image')) {
+            return inquirer.prompt(updateImageQs).then(newImage => {
+              foodToUpdate[0].image = newImage.updateImage;
+            });
+          }
+        })
+        .then(() => {
+          return agent()
+            .patch(`http://localhost:7890/api/v1/food/${foodToUpdate[0]._id}`)
+            .send(foodToUpdate[0])
+            .then(() => {
+              console.log('Your new menu item', foodToUpdate[0]);
+            });
+        })
+        .then(() => require('./edit-menu')());
+    }
+  });
   
     
   
