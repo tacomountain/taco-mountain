@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
-const agent = require('./requester');
+const agent = require('./utils/requester');
 
 const signUpQs = [
   {
