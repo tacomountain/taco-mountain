@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const adminMenu = require('../admin-menu');
-const agent = require('../../requester');
+const agent = require('../../utils/requester');
 const { topRewards, topSpenders, popularItems, profitableItems } = require('./analytics-methods');
 
 const aggregationQs = [

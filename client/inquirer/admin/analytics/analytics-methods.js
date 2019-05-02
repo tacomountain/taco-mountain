@@ -1,4 +1,4 @@
-const agent = require('../../requester');
+const agent = require('../../utils/requester');
 
 function topRewards() {
   return agent()
