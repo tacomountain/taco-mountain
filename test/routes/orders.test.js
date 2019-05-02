@@ -73,4 +73,15 @@ describe('order routes', () => {
         }]);
       });
   });
+
+  it('gets total profit margin', () => {
+    return getAdminAgent()
+      .get('/api/v1/orders/totalProfitMargin')
+      .then(res => {
+        console.log(res);
+        expect(res.body).toEqual({
+          profit: expect.any(String)
+        });
+      });
+  });
 });
