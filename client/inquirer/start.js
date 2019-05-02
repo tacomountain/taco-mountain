@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
 const agent = require('./utils/requester');
+const chalk = require('chalk');
 
 const signUpQs = [
   {
@@ -49,12 +50,12 @@ const signInQs = [
   }
 ];
 
-function handleRole(role) {
-  switch(role) {
+function handleRole(user) {
+  switch(user.role) {
     case 'admin':
       return adminMenu();
     case 'customer':
-      return customerMenu();
+      return customerMenu(user);
   }
 }
 
@@ -64,7 +65,14 @@ const signInPrompt = () =>
       agent()
         .post('http://localhost:7890/api/v1/auth/signin')
         .send(answers)
-        .then(res => handleRole(res.body.role))
+        .then(res => {
+          if(res.body.status === 401) {
+            // eslint-disable-next-line no-console
+            console.log(chalk.red('invalid authorization'));
+            require('../client')();
+          }
+          handleRole(res.body);
+        })
     );
     
 const signUpPrompt = () =>
@@ -73,7 +81,7 @@ const signUpPrompt = () =>
       agent()
         .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
         .send({ name, password, phone })
-        .then(() => handleRole(role))
+        .then(res => handleRole(res.body))
     );
 
 module.exports = { signInPrompt, signUpPrompt };

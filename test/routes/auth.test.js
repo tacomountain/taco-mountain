@@ -84,7 +84,7 @@ describe('auth route tests', () => {
       .send({ phone: '2345678901', password: 'sneakyPhrase32' })
       .then(res => {
         expect(res.body).toEqual({
-          error: 'Invalid login'
+          status: 401
         });
       });
   });
@@ -98,7 +98,7 @@ describe('auth route tests', () => {
       })
       .then(res => {
         expect(res.body).toEqual({
-          error: 'Invalid login'
+          status: 401
         });
       });
   });
