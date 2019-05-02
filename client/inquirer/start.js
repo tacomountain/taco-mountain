@@ -49,12 +49,12 @@ const signInQs = [
   }
 ];
 
-function handleRole(role) {
-  switch(role) {
+function handleRole(user) {
+  switch(user.role) {
     case 'admin':
       return adminMenu();
     case 'customer':
-      return customerMenu();
+      return customerMenu(user);
   }
 }
 
@@ -64,7 +64,7 @@ const signInPrompt = () =>
       agent()
         .post('http://localhost:7890/api/v1/auth/signin')
         .send(answers)
-        .then(res => handleRole(res.body.role))
+        .then(res => handleRole(res.body))
     );
     
 const signUpPrompt = () =>
@@ -73,7 +73,7 @@ const signUpPrompt = () =>
       agent()
         .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
         .send({ name, password, phone })
-        .then(() => handleRole(role))
+        .then(res => handleRole(res.body))
     );
 
 module.exports = { signInPrompt, signUpPrompt };
