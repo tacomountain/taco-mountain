@@ -51,17 +51,14 @@ const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({ type, name, p
 });
 
 const removeItemPrompt = async() => {
-  // gets a list of all food in the database
+  
   const foodList = await agent().get('http://localhost:7890/api/v1/food');
 
-  //creates a list of food based on food type
   const appList = foodList.body.filter(food => {if(food.type === 'appetizer') {return food;}}).map(app => {return app.name;});
   const entreeList = foodList.body.filter(food => {if(food.type === 'entree') {return food;}}).map(entree => {return entree.name;});
   const dessertList = foodList.body.filter(food => {if(food.type === 'dessert') {return food;}}).map(dessert => {return dessert.name;});
   const drinkList = foodList.body.filter(food => {if(food.type === 'drink') {return food;}}).map(drink => {return drink.name;});
 
-
-  // inquirer qs
   const removeMenuItemQs = [
     {
       type: 'checkbox',
@@ -81,9 +78,7 @@ const removeItemPrompt = async() => {
     }
   ];
 
-  // remove item logic
   return inquirer.prompt(removeMenuItemQs).then(results => {
-    // creating a list of ids to delete
     let idsToDelete = [];
     results.remove_items.forEach(food => {
       foodList.body.filter(foodOBj => {
@@ -95,7 +90,6 @@ const removeItemPrompt = async() => {
     return idsToDelete;
   })
     .then(ids => {
-      // for each id, ping server with delete request
       return ids.forEach(id => {
         return agent()
           .delete(`http://localhost:7890/api/v1/food/${id}`)
@@ -107,14 +101,10 @@ const removeItemPrompt = async() => {
     .then(() => require('./edit-menu')());
 };
 
-
-
 const updateItemPrompt = async() => {
   
-  // gets a list of all food in the database
   const foodList = await agent().get('http://localhost:7890/api/v1/food');
 
-  //creates a list of food based on food type
   const appList = foodList.body.filter(food => {if(food.type === 'appetizer') {return food;}}).map(app => {return app.name;});
   const entreeList = foodList.body.filter(food => {if(food.type === 'entree') {return food;}}).map(entree => {return entree.name;});
   const dessertList = foodList.body.filter(food => {if(food.type === 'dessert') {return food;}}).map(dessert => {return dessert.name;});
@@ -164,13 +154,10 @@ const updateItemPrompt = async() => {
     }
   ];
   
-  // udpate item logic
   return inquirer.prompt(updateMenuItemQs).then(results => {
-    console.log('results', results);
 
     const foodToUpdate = foodList.body.filter(foodObj => {
       if(foodObj.name === results.item_to_update) {
-        console.log('food obj', foodObj);
         return foodObj;
       }
     });
@@ -204,11 +191,7 @@ const updateItemPrompt = async() => {
         .then(() => require('./edit-menu')());
     }
   });
-  
-    
-  
 };
-
 
 module.exports = {
   addItemPrompt,
