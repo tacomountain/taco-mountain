@@ -7,7 +7,7 @@ module.exports = async() => {
   const foodList = await agent().get(REQUEST_URL);
   const filterFoodList = type => foodList.body.filter(food => food.type === type)
     .map(food => ({
-      name: food.name,
+      name: `${food.name} - $${food.price.toFixed(2)}`,
       value: {
         _id: food._id,
         name: food.name,
