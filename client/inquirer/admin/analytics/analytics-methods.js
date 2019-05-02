@@ -100,7 +100,7 @@ function getOrders() {
           ' - Phone:', order.customer.user.phone,
           '\n\tItems Ordered:');
         order.food.forEach(item => {
-          console.log('\t' + item.foodItem.name, '\t$' + item.purchasePrice);
+          console.log('\t' + item.name, '\t$' + item.purchasePrice);
         });
         console.log('  Tip: $' + order.tip);
         console.log(chalk.bold('  Total: $' + order.total));

@@ -40,7 +40,7 @@ module.exports = async(user) => {
         delete food.type;
         delete food.unitCost;
         delete food.image;
-        food.foodItem = food._id;
+        food.foodId = food._id;
         food.purchasePrice = food.price;
         delete food._id;
         delete food.price;
