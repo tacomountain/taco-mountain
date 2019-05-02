@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+const chalk = require('chalk');
 const agent = require('../../utils/requester');
 
 function topRewards() {
@@ -6,7 +8,7 @@ function topRewards() {
     .then(res => res.body)
     .then(customers => {
       customers.forEach(customer => {
-        console.log('\t', customer.name + ':', customer.rewards, 'points');
+        console.log('\t', customer.name + ':', chalk.yellow(customer.rewards), chalk.yellow('points'));
       });
     })
     .then(() => require('./analytics')());
@@ -18,7 +20,7 @@ function topSpenders() {
     .then(res => res.body)
     .then(customers => {
       customers.forEach(customer => {
-        console.log(customer._id.name + ':', '\n\t\t$' + customer.totalSpent);
+        console.log(customer._id.name + ':', chalk.blue('\n\t\t$') + chalk.blue.bold(customer.totalSpent));
       });
     })
     .then(() => require('./analytics')());
@@ -31,7 +33,7 @@ function popularItems() {
     .then(items => {
       items.forEach(item => {
         // eslint-disable-next-line no-console
-        console.log(item.name, '\n\t\tPrice: $' + item.price, '\tSold:', item.purchased);
+        console.log(chalk.yellow(item.name), '\n\t\tPrice: $' + item.price, '\tSold:', item.purchased);
       });
     })
     .catch()
@@ -45,7 +47,7 @@ function profitableItems() {
     .then(items => {
       items.forEach(item => {
         // eslint-disable-next-line no-console
-        console.log(item.item.name, '\n\t\tProfit:', '$' + item.totalProfit.toFixed(2));
+        console.log(chalk.blue(item.item.name), '\n\t\tProfit:', '$' + item.totalProfit.toFixed(2));
       });
     })
     .catch()
@@ -57,7 +59,7 @@ function totalSales() {
     .get('http://localhost:7890/api/v1/orders/totalSales')
     .then(res => res.body)
     .then(sales => {
-      console.log('\t\t$' + sales[0].total);
+      console.log(chalk.bold.red('\t\t$' + sales[0].total));
     })
     .catch()
     .then(() => require('./analytics')());
@@ -68,7 +70,7 @@ function profitMargin() {
     .get('http://localhost:7890/api/v1/orders/totalProfitMargin')
     .then(res => res.body)
     .then(margin => {
-      console.log('\t\t$' + margin.profit);
+      console.log(chalk.bold.blue('\t\t$' + margin.profit));
     })
     .catch()
     .then(() => require('./analytics')());
@@ -80,11 +82,32 @@ function profitByFood() {
     .then(res => res.body)
     .then(foods => {
       foods.forEach(food => {
-        console.log(food.item.name, '\n\t\tProfit Earned: $' + food.totalProfit.toFixed(2));
+        console.log(chalk.bold(food.item.name), '\n\t\tProfit Earned: $' + food.totalProfit.toFixed(2));
       });
     })
     .catch()
     .then(() => require('./analytics')());
 }
 
-module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin, profitByFood };
+function getOrders() {
+  return agent()
+    .get('http://localhost:7890/api/v1/orders')
+    .then(res => res.body)
+    .then(orders => {
+      for(let i = 0; i < 6; i++) {
+        const order = orders[i];
+        console.log('\n' + chalk.bold.yellow(order.customer.user.name), 
+          ' - Phone:', order.customer.user.phone,
+          '\n\tItems Ordered:');
+        order.food.forEach(item => {
+          console.log('\t' + item.foodItem.name, '\t$' + item.purchasePrice);
+        });
+        console.log('  Tip: $' + order.tip);
+        console.log(chalk.bold('  Total: $' + order.total));
+      }
+    })
+    .catch()
+    .then(() => require('./analytics')());
+}
+
+module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin, profitByFood, getOrders };

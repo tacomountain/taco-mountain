@@ -2,6 +2,8 @@ const inquirer = require('inquirer');
 const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
 const agent = require('./requester');
+const chalk = require('chalk');
+
 
 const signUpQs = [
   {
@@ -64,7 +66,14 @@ const signInPrompt = () =>
       agent()
         .post('http://localhost:7890/api/v1/auth/signin')
         .send(answers)
-        .then(res => handleRole(res.body))
+        .then(res => {
+          if(res.body.status === 401) {
+            // eslint-disable-next-line no-console
+            console.log(chalk.red('invalid authorization'));
+            require('../client')();
+          }
+          handleRole(res.body.role);
+        })
     );
     
 const signUpPrompt = () =>
