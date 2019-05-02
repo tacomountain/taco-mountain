@@ -1,12 +1,28 @@
 const inquirer = require('inquirer');
-const agent = require('../../requester');
+const agent = require('../../utils/requester');
+const layoutMenu = require('../../utils/layout-menu');
 
-const addMenuItemQs = [
+const REQUEST_URL = 'http://localhost:7890/api/v1/food';
+
+const addItemQs = [
   {
     type: 'list',
     name: 'type',
-    message: 'What type of menu item',
-    choices: ['appetizer', 'Entre', 'Dessert', 'Drink']
+    message: 'What type  item',
+    choices: [
+      {
+        name: 'Appetizer',
+        value: 'appetizer'
+      },
+      {
+        name: 'Entree',
+        value: 'entree'
+      },
+      {
+        name: 'Drink',
+        value: 'drink'
+      }
+    ]
   },
   {
     type: 'input',
@@ -26,48 +42,32 @@ const addMenuItemQs = [
   {
     type: 'input',
     name: 'image',
-    message: 'PhotoUrl'
+    message: 'Photo Url'
   },
   {
     type: 'confirm',
-    name: 'confirm_order',
+    name: 'confirmation',
     message: 'Add this item to the menu?'
   }
 ];
 
-const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({ type, name, price, unitCost, image, confirm_order }) => {
-  if(confirm_order) {
+const addItemPrompt = () => inquirer.prompt(addItemQs).then(({ type, name, price, unitCost, image, confirmation }) => {
+  if(confirmation) {
     return agent()
-      .post('http://localhost:7890/api/v1/food')
+      .post(REQUEST_URL)
       .send({ name, type, price, unitCost, image })
-      .then(() => {
-        require('./edit-menu')();})
+      .then(() => require('./edit-menu')())
       .catch();
-  } else {
-    require('./edit-menu')();
-  }
+  } else return require('./edit-menu')();
 });
 
 const removeItemPrompt = async() => {
-  
-  const foodList = await agent().get('http://localhost:7890/api/v1/food');
-
-  const appList = foodList.body.filter(food => {if(food.type === 'appetizer') {return food;}}).map(app => {return app.name;});
-  const entreeList = foodList.body.filter(food => {if(food.type === 'entree') {return food;}}).map(entree => {return entree.name;});
-  const dessertList = foodList.body.filter(food => {if(food.type === 'dessert') {return food;}}).map(dessert => {return dessert.name;});
-  const drinkList = foodList.body.filter(food => {if(food.type === 'drink') {return food;}}).map(drink => {return drink.name;});
-
-  const removeMenuItemQs = [
+  const removeItemQs = [
     {
       type: 'checkbox',
       message: 'Select items to remove from menu',
       name: 'remove_items',
-      choices: [
-        new inquirer.Separator('APPETIZERS'), ...appList,
-        new inquirer.Separator('TACOS'), ...entreeList,
-        new inquirer.Separator('DESSERT'), ...dessertList,
-        new inquirer.Separator('DRINKS'), ...drinkList
-      ],
+      choices: await layoutMenu(),
     },
     {
       type: 'confirm',
@@ -76,31 +76,17 @@ const removeItemPrompt = async() => {
     }
   ];
 
-  return inquirer.prompt(removeMenuItemQs).then(results => {
-    let idsToDelete = [];
-    results.remove_items.forEach(food => {
-      foodList.body.filter(foodOBj => {
-
-        if(foodOBj.name === food) { 
-          idsToDelete.push(foodOBj._id); }
-      });
-    });
-    return idsToDelete;
-  })
-    .then(ids => {
-      return ids.forEach(id => {
-        return agent()
-          .delete(`http://localhost:7890/api/v1/food/${id}`)
-          .then(deletedFood => {
-            console.log(`You deleted ${deletedFood.body.name}`);
-          });
-      });
+  return inquirer.prompt(removeItemQs)
+    .then(({ remove_items }) => {
+      const idsToDelete = remove_items.map(item => item._id);
+      return Promise.all(idsToDelete.map(id => agent().delete(`${REQUEST_URL}/${id}`)))
+        .then(() => remove_items.map(item => item.name));
     })
+    .then(removedItemNames => console.log(`You've removed ${removedItemNames.join(', ')}`))
     .then(() => require('./edit-menu')());
 };
 
 const updateItemPrompt = async() => {
-  
   const foodList = await agent().get('http://localhost:7890/api/v1/food');
 
   const appList = foodList.body.filter(food => {if(food.type === 'appetizer') {return food;}}).map(app => {return app.name;});
@@ -151,7 +137,7 @@ const updateItemPrompt = async() => {
       name: 'updateImage'
     }
   ];
-  
+
   return inquirer.prompt(updateMenuItemQs).then(results => {
 
     const foodToUpdate = foodList.body.filter(foodObj => {
