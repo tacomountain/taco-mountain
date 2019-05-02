@@ -29,7 +29,7 @@ describe('food routes', () => {
     return getAdminAgent()
       .get('/api/v1/food')
       .then(res => {
-        expect(res.body).toHaveLength(20);
+        expect(res.body).toHaveLength(15);
       });
   });
 
