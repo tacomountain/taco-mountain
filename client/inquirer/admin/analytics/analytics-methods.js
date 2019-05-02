@@ -96,13 +96,13 @@ function getOrders() {
       for(let i = 0; i < 2; i++) {
         const order = orders[i];
         console.log('\n' + order.customer.user.name, 
-          'Phone:', order.customer.user.phone,
+          ' - Phone:', order.customer.user.phone,
           '\n\tItems Ordered:');
         order.food.forEach(item => {
           console.log('\t' + item.foodItem.name, '\t$' + item.purchasePrice);
         });
-        console.log('Tip: $' + order.tip);
-        console.log('Total: $' + order.total);
+        console.log('  Tip: $' + order.tip);
+        console.log('  Total: $' + order.total);
       }
     })
     .catch()
