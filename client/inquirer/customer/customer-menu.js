@@ -19,7 +19,7 @@ module.exports = async(user) => {
       const tipQ = {
         type: 'number',
         name: 'tip',
-        message: `Your order subtotal is $${subtotal}. How much would you like to tip?`
+        message: `Your order subtotal is $${subtotal.toFixed(2)}. How much would you like to tip?`
       };
 
       return inquirer.prompt(tipQ)
@@ -29,7 +29,7 @@ module.exports = async(user) => {
           const confirmQ = {
             type: 'confirm',
             name: 'confirmation',
-            message: `Your total is ${total}. Would you like to place this order?`
+            message: `Your total is ${total.toFixed(2)}. Would you like to place this order?`
           };
 
           return inquirer.prompt(confirmQ)
