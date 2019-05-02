@@ -19,6 +19,7 @@
 //     type: 'input',
 //     name: 'tip',
 //     message: 'Your order total is [$$]. How much would you like to tip?'
+
 // },
 // {
 //     type: 'confirm',

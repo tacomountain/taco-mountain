@@ -1,7 +1,5 @@
 const inquirer = require('inquirer');
-const request = require('superagent');
 const agent = require('../../requester');
-const Food = require('../../../../lib/models/Food');
 
 const addMenuItemQs = [
   {
@@ -51,17 +49,14 @@ const addItemPrompt = () => inquirer.prompt(addMenuItemQs).then(({ type, name, p
 });
 
 const removeItemPrompt = async() => {
-  // gets a list of all food in the database
+  
   const foodList = await agent().get('http://localhost:7890/api/v1/food');
 
-  //creates a list of food based on food type
   const appList = foodList.body.filter(food => {if(food.type === 'appetizer') {return food;}}).map(app => {return app.name;});
   const entreeList = foodList.body.filter(food => {if(food.type === 'entree') {return food;}}).map(entree => {return entree.name;});
   const dessertList = foodList.body.filter(food => {if(food.type === 'dessert') {return food;}}).map(dessert => {return dessert.name;});
   const drinkList = foodList.body.filter(food => {if(food.type === 'drink') {return food;}}).map(drink => {return drink.name;});
 
-
-  // inquirer qs
   const removeMenuItemQs = [
     {
       type: 'checkbox',
@@ -81,9 +76,7 @@ const removeItemPrompt = async() => {
     }
   ];
 
-  // remove item logic
   return inquirer.prompt(removeMenuItemQs).then(results => {
-    // creating a list of ids to delete
     let idsToDelete = [];
     results.remove_items.forEach(food => {
       foodList.body.filter(foodOBj => {
@@ -95,7 +88,6 @@ const removeItemPrompt = async() => {
     return idsToDelete;
   })
     .then(ids => {
-      // for each id, ping server with delete request
       return ids.forEach(id => {
         return agent()
           .delete(`http://localhost:7890/api/v1/food/${id}`)
@@ -107,14 +99,10 @@ const removeItemPrompt = async() => {
     .then(() => require('./edit-menu')());
 };
 
-
-
 const updateItemPrompt = async() => {
   
-  // gets a list of all food in the database
   const foodList = await agent().get('http://localhost:7890/api/v1/food');
 
-  //creates a list of food based on food type
   const appList = foodList.body.filter(food => {if(food.type === 'appetizer') {return food;}}).map(app => {return app.name;});
   const entreeList = foodList.body.filter(food => {if(food.type === 'entree') {return food;}}).map(entree => {return entree.name;});
   const dessertList = foodList.body.filter(food => {if(food.type === 'dessert') {return food;}}).map(dessert => {return dessert.name;});
@@ -152,7 +140,7 @@ const updateItemPrompt = async() => {
     {
       type: 'number',
       message: 'New cost of item:',
-      name: 'newUnitPrice'
+      name: 'newUnitCost'
     }
   ];
 
@@ -160,59 +148,48 @@ const updateItemPrompt = async() => {
     {
       type: 'input',
       message: 'Enter new image url:',
-      name: 'newPrice'
+      name: 'updateImage'
     }
   ];
   
-  // udpate item logic
   return inquirer.prompt(updateMenuItemQs).then(results => {
-    console.log(results);
 
-    // get obj to update
-    let foodToUpdate = foodList.body.filter(foodObj => {
+    const foodToUpdate = foodList.body.filter(foodObj => {
       if(foodObj.name === results.item_to_update) {
-        console.log(foodObj);
         return foodObj;
       }
     });
 
-    // updates price
     if(results.updateFields.includes('Price')) {
-      inquirer.prompt(updatePriceQs).then(newPrice => {
-        foodToUpdate.price = newPrice;
-      });
-    }
-    
-    // updates unit cost
-    if(results.updateFields.includes('Unit Cost')) {
-      inquirer.prompt(updateUnitPriceQs).then(newUnitCost => {
-        foodToUpdate.unitCost = newUnitCost;
-      });
-    }
-    
-    // updates unit cimage
-    if(results.updateFields.includes('Image')) {
-      inquirer.prompt(updateImageQs).then(newImage => {
-        foodToUpdate.image = newImage;
-      });
-    }
-    return foodToUpdate;
-  })
-    .then(newFoodObj => {
-      console.log(newFoodObj);
-      return agent()
-        .patch(`http://localhost:7890/api/v1/food/${newFoodObj._id}`)
-        .send(newFoodObj)
+      return inquirer.prompt(updatePriceQs).then(newPrice => {
+        foodToUpdate[0].price = newPrice.newPrice;
+      })
         .then(() => {
-          console.log('Your new menu item', newFoodObj);
-        });
-    })
-    .then(() => require('./edit-menu')());
-  
-    
-  
+          // updates unit cost
+          if(results.updateFields.includes('Unit Cost')) {
+            return inquirer.prompt(updateUnitPriceQs).then(newUnitCost => {
+              foodToUpdate[0].unitCost = newUnitCost.newUnitCost;
+            });
+          }
+        }).then(() => {
+          if(results.updateFields.includes('Image')) {
+            return inquirer.prompt(updateImageQs).then(newImage => {
+              foodToUpdate[0].image = newImage.updateImage;
+            });
+          }
+        })
+        .then(() => {
+          return agent()
+            .patch(`http://localhost:7890/api/v1/food/${foodToUpdate[0]._id}`)
+            .send(foodToUpdate[0])
+            .then(() => {
+              console.log('Your new menu item', foodToUpdate[0]);
+            });
+        })
+        .then(() => require('./edit-menu')());
+    }
+  });
 };
-
 
 module.exports = {
   addItemPrompt,
