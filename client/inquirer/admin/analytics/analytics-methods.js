@@ -63,5 +63,16 @@ function totalSales() {
     .then(() => require('./analytics')());
 }
 
+function profitMargin() {
+  return agent()
+    .get('http://localhost:7890/api/v1/orders/totalProfitMargin')
+    .then(res => res.body)
+    .then(margin => {
+      console.log('\t\t$' + margin.profit);
+    })
+    .catch()
+    .then(() => require('./analytics')());
+}
 
-module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales };
+
+module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin };
