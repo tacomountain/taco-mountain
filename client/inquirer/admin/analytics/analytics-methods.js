@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const agent = require('../../requester');
 
 function topRewards() {
@@ -87,4 +88,25 @@ function profitByFood() {
     .then(() => require('./analytics')());
 }
 
-module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin, profitByFood };
+function getOrders() {
+  return agent()
+    .get('http://localhost:7890/api/v1/orders')
+    .then(res => res.body)
+    .then(orders => {
+      for(let i = 0; i < 2; i++) {
+        const order = orders[i];
+        console.log('\n' + order.customer.user.name, 
+          'Phone:', order.customer.user.phone,
+          '\n\tItems Ordered:');
+        order.food.forEach(item => {
+          console.log('\t' + item.foodItem.name, '\t$' + item.purchasePrice);
+        });
+        console.log('Tip: $' + order.tip);
+        console.log('Total: $' + order.total);
+      }
+    })
+    .catch()
+    .then(() => require('./analytics')());
+}
+
+module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin, profitByFood, getOrders };
