@@ -26,9 +26,9 @@ async function seedCustomers(customerCount = 20) {
 function seedFood(foodCount = 20) {
   const food = [...Array(foodCount)].map(() => ({
     name: `${chance.animal()} Taco`,
-    price: chance.floating({ min: 0.5, max: 10, fixed: 3 }),
+    price: chance.floating({ min: 2, max: 10, fixed: 2 }),
     type: chance.pickone(['appetizer', 'entree', 'dessert', 'drink']),
-    unitCost: chance.floating({ min: 0.5, max: 6, fixed: 3 }),
+    unitCost: chance.floating({ min: 0.5, max: 5, fixed: 2 }),
     image: chance.avatar()
   }));
   return Food.create(food);
