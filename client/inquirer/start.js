@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
-const agent = require('./requester');
+const agent = require('./utils/requester');
 const chalk = require('chalk');
 
 
@@ -72,7 +72,7 @@ const signInPrompt = () =>
             console.log(chalk.red('invalid authorization'));
             require('../client')();
           }
-          handleRole(res.body.role);
+          handleRole(res.body);
         })
     );
     
