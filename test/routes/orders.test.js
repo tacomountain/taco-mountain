@@ -64,6 +64,26 @@ describe('order routes', () => {
       });
   });
 
+
+  it('gets total sales', () => {
+    return getAdminAgent()
+      .get('/api/v1/orders/totalSales')
+      .then(res => {
+        expect(res.body).toEqual([{
+          total: expect.any(Number)
+        }]);
+      });
+  });
+
+  it('gets total profit margin', () => {
+    return getAdminAgent()
+      .get('/api/v1/orders/totalProfitMargin')
+      .then(res => {
+        expect(res.body).toEqual({
+          profit: expect.any(String)
+        });
+      });
+  });
   it('gets a list of profits by food item', () => {
     return getAdminAgent()
       .get('/api/v1/orders/profitsByFood')
@@ -91,6 +111,7 @@ describe('order routes', () => {
       .get('/api/v1/orders/topMenuItems')
       .then(res => {
         expect(res.body).toHaveLength(3);
+
       });
   });
 });
