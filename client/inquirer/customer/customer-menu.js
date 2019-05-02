@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const agent = require('../requester');
+const agent = require('../utils/requester');
 
 module.exports = async(user) => {
   //** */access customer to get rewards
@@ -25,7 +25,6 @@ module.exports = async(user) => {
     .then(order => {
       let foodArray = [];
       let prices = [];
-      //   let prices = [];
       order.food.forEach(item => {
         foodList.body.forEach(food => {
           if(item === food.name) {
@@ -77,7 +76,7 @@ module.exports = async(user) => {
                       tip: tip,
                       total: total
                     })
-                    .then(() => {
+                    .then(order => {
                       console.log(order.body);
                       //what next?
                     });
