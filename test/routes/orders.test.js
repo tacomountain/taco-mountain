@@ -106,12 +106,11 @@ describe('order routes', () => {
         }
       });
   });
-  it('gets top three menu items', () => {
+  it('gets top ten menu items', () => {
     return getAdminAgent()
       .get('/api/v1/orders/topMenuItems')
       .then(res => {
-        expect(res.body).toHaveLength(3);
-
+        expect(res.body).toHaveLength(10);
       });
   });
 });

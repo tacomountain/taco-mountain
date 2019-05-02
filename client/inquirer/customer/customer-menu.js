@@ -90,5 +90,3 @@ module.exports = async(user) => {
         });
     });
 };
-
-

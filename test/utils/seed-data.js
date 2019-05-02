@@ -9,7 +9,7 @@ function seedUsers(userCount = 20) {
     name: chance.name(),
     password: 'password123',
     phone: chance.phone({ formatted: false }),
-    role: 'customer'   
+    role: 'customer'
   }));
   return User.create(users);
 }
@@ -18,20 +18,34 @@ async function seedCustomers(customerCount = 20) {
   const users = await seedUsers();
   const customers = [...Array(customerCount)].map((_, i) => ({
     user: users[i]._id,
-    rewards: chance.integer({ min: 0, max: 10 })
+    rewards: chance.natural({ max: 50 })
   }));
   return Customer.create(customers);
 }
 
-function seedFood(foodCount = 20) {
-  const food = [...Array(foodCount)].map(() => ({
-    name: `${chance.animal()} Taco`,
-    price: chance.floating({ min: 2, max: 10, fixed: 2 }),
-    type: chance.pickone(['appetizer', 'entree', 'dessert', 'drink']),
-    unitCost: chance.floating({ min: 0.5, max: 5, fixed: 2 }),
-    image: chance.avatar()
-  }));
+function seedFood(foodCount = 5) {
+  const food = ['appetizer', 'entree', 'drink'].map(type =>
+    [...Array(foodCount)].map(() =>
+      ({
+        name: handleFoodType(type),
+        price: chance.floating({ min: 2, max: 10, fixed: 2 }),
+        type: type,
+        unitCost: chance.floating({ min: 0.5, max: 2, fixed: 2 }),
+        image: chance.avatar()
+      }))
+  ).flat();
   return Food.create(food);
+}
+
+function handleFoodType(type) {
+  switch(type) {
+    case 'appetizer':
+      return `${chance.country({ full: true })} Nachos`;
+    case 'entree':
+      return `${chance.animal()} Tacos`;
+    case 'drink':
+      return `${chance.profession()} Margarita`;
+  }
 }
 
 async function seedOrders(orderCount = 100) {
