@@ -16,6 +16,7 @@ module.exports = () => inquirer.prompt(adminTasks).then(({ task }) => {
     case 'Analytics':
       return require('./analytics/analytics')();
     case 'Sign Out':
+      // eslint-disable-next-line no-console
       return console.log('You are signed out.');
   }
 });

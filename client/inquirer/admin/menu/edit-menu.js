@@ -11,19 +11,15 @@ const editMenuQs = [
   }
 ];
 
-module.exports = () => inquirer.prompt(editMenuQs).then(task => {
-  switch(task.task) {
+module.exports = () => inquirer.prompt(editMenuQs).then(({ task }) => {
+  switch(task) {
     case 'Add Item':
-      addItemPrompt();
-      break;
+      return addItemPrompt();
     case 'Remove Item':
-      removeItemPrompt();
-      break;
+      return removeItemPrompt();
     case 'Update Item':
-      updateItemPrompt();
-      break;
+      return updateItemPrompt();
     case 'Back to Admin':
-      adminMenu();
-      break;
+      return adminMenu();
   }
 });
