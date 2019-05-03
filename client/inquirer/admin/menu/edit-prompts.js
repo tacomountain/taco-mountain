@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const agent = require('../../utils/requester');
 const layoutMenu = require('../../utils/layout-menu');
 
-const REQUEST_URL = 'http://localhost:7890/api/v1/food';
+const REQUEST_URL = require('../../utils/request-url');
 
 const addItemQs = [
   {
@@ -56,7 +56,7 @@ const addItemPrompt = () => {
     .then(({ type, name, price, unitCost, image, confirmation }) => {
       if(confirmation) {
         return agent()
-          .post(REQUEST_URL)
+          .post(`${REQUEST_URL}/food`)
           .send({ name, type, price, unitCost, image });
       }
     })
@@ -82,7 +82,7 @@ const removeItemPrompt = async() => {
     .then(({ remove_items, confirmation }) => {
       if(confirmation) {
         const idsToDelete = remove_items.map(item => item._id);
-        return Promise.all(idsToDelete.map(id => agent().delete(`${REQUEST_URL}/${id}`)))
+        return Promise.all(idsToDelete.map(id => agent().delete(`${REQUEST_URL}/food/${id}`)))
           .then(() => remove_items.map(item => item.name))
           .then(removedItemNames => console.log(`You've removed ${removedItemNames.join(', ')}`));
       }
@@ -130,7 +130,7 @@ const updateItemPrompt = async() => {
       return inquirer.prompt(fieldUpdateQs)
         .then(answers => {
           return agent()
-            .patch(`${REQUEST_URL}/${update_item._id}`)
+            .patch(`${REQUEST_URL}/food/${update_item._id}`)
             .send(answers)
             .then(() => console.log(`You've updated ${update_item.name}`));
         });

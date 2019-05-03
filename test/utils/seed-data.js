@@ -54,9 +54,9 @@ async function seedOrders(orderCount = 100) {
   const orders = [...Array(orderCount)].map(() => ({
     customer: chance.pickone(customers)._id,
     food: [
-      { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price },
-      { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price },
-      { foodItem: chance.pickone(food)._id, purchasePrice: chance.pickone(food).price }
+      { foodId: chance.pickone(food)._id, name: chance.pickone(food).name, purchasePrice: chance.pickone(food).price },
+      { foodId: chance.pickone(food)._id, name: chance.pickone(food).name, purchasePrice: chance.pickone(food).price },
+      { foodId: chance.pickone(food)._id, name: chance.pickone(food).name, purchasePrice: chance.pickone(food).price }
     ],
 
     subtotal: chance.integer({ min: 0, max: 100 }),

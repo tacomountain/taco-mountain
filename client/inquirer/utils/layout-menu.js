@@ -1,10 +1,10 @@
 const agent = require('./requester');
 const inquirer = require('inquirer');
 
-const REQUEST_URL = 'http://localhost:7890/api/v1/food';
+const REQUEST_URL = require('../utils/request-url');
 
 module.exports = async() => {
-  const foodList = await agent().get(REQUEST_URL);
+  const foodList = await agent().get(`${REQUEST_URL}/food`);
   const filterFoodList = type => foodList.body.filter(food => food.type === type)
     .map(food => ({
       name: `${food.name} - $${food.price.toFixed(2)}`,

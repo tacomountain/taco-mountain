@@ -85,10 +85,16 @@ const signInPrompt = () =>
 const signUpPrompt = () =>
   inquirer.prompt(signUpQs)
     .then(({ role, name, phone, password }) =>
+    {
+      if(!phone.match(/\d{10}/)) {
+        console.log(chalk.red('Phone number must match regular expression /\\d{10}/'));
+        return require('../client')();
+      }
       agent()
         .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
         .send({ name, password, phone })
-        .then(res => handleRole(res.body))
+        .then(res => handleRole(res.body));
+    }
     );
 
 module.exports = { signInPrompt, signUpPrompt };
