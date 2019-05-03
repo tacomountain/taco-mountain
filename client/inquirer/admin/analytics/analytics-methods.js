@@ -94,7 +94,7 @@ function getOrders() {
     .get('http://localhost:7890/api/v1/orders')
     .then(res => res.body)
     .then(orders => {
-      for(let i = 0; i < 6; i++) {
+      for(let i = orders.length - 5; i < orders.length; i++) {
         const order = orders[i];
         console.log('\n' + chalk.bold.yellow(order.customer.user.name), 
           ' - Phone:', order.customer.user.phone,
