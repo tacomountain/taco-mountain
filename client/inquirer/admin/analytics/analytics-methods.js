@@ -23,7 +23,7 @@ function topSpenders() {
     .then(res => res.body)
     .then(customers => {
       customers.forEach(customer => {
-        console.log(customer._id.name + ':', chalk.blue('\n\t\t$') + chalk.blue.bold(customer.totalSpent));
+        console.log(customer._id.name + ':', chalk.blue('\n\t\t$') + chalk.blue.bold(customer.totalSpent.toFixed(2)));
       });
     })
     .catch()
@@ -61,7 +61,7 @@ function totalSales() {
     .get(`${REQUEST_URL}/orders/totalSales`)
     .then(res => res.body)
     .then(sales => {
-      console.log(chalk.bold.red('\t\t$' + sales[0].total));
+      console.log(chalk.bold.red('\t\t$' + sales[0].total.toFixed(2)));
     })
     .catch()
     .then(() => require('./analytics')());
@@ -89,10 +89,10 @@ function getOrders() {
           ' - Phone:', order.customer.user.phone,
           '\n\tItems Ordered:');
         order.food.forEach(item => {
-          console.log('\t' + item.name, '\t$' + item.purchasePrice);
+          console.log('\t' + item.name, '\t$' + item.purchasePrice.toFixed(2));
         });
         console.log('  Tip: $' + order.tip);
-        console.log(chalk.bold('  Total: $' + order.total));
+        console.log(chalk.bold('  Total: $' + order.total.toFixed(2)));
       }
     })
     .catch()
