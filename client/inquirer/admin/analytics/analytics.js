@@ -48,7 +48,7 @@ module.exports = () => inquirer.prompt(aggregationQs).then(choice => {
       return profitMargin();
     case 'Get most recent orders':
       return getOrders();
-    case 'Back to Admin':
+    case chalkPipe('yellow')('Back to Admin'):
       return adminMenu();
   }
 });
