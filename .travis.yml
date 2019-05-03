@@ -1,4 +1,4 @@
 language: node_js
 node_js: "node"
 services: mongodb
-env: AUTH_SECRET=secretWord MONGODB_URI=mongodb://localhost:27017/soloAuth
+env: AUTH_SECRET=secretWord MONGODB_URI=mongodb://localhost:27017/soloAuth TWILIO_ACCOUNT_SID=fake TWILIO_AUTH_TOKEN=fake
