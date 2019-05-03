@@ -11,7 +11,7 @@ const editMenuQs = [
     type: 'list',
     name: 'task',
     message: chalkPipe(chance.pickone(colors))('How do you want to edit the menu?'),
-    choices: ['Add Item', 'Remove Item', 'Update Item', 'Back to Admin']
+    choices: ['Add Item', 'Remove Item', 'Update Item', chalkPipe('yellow')('Back to Admin')]
   }
 ];
 
@@ -23,7 +23,7 @@ module.exports = () => inquirer.prompt(editMenuQs).then(({ task }) => {
       return removeItemPrompt();
     case 'Update Item':
       return updateItemPrompt();
-    case 'Back to Admin':
+    case chalkPipe('yellow')('Back to Admin'):
       return adminMenu();
   }
 });
