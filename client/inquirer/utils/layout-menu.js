@@ -25,8 +25,8 @@ module.exports = async() => {
   const drinkList = filterFoodList('drink');
 
   return [
-    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))(figlet.textSync('DRINKS', { font: 'Mini' }))), ...drinkList,
-    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))(figlet.textSync('APPETIZERS', { font: 'Mini' }))), ...appetizerList,
-    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))(figlet.textSync('ENTREES', { font: 'Mini' }))), ...entreeList
+    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))('DRINKS')), ...drinkList,
+    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))('APPETIZERS')), ...appetizerList,
+    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))('ENTREES')), ...entreeList
   ];
 };
