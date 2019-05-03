@@ -4,18 +4,15 @@ const customerMenu = require('./customer/customer-menu');
 const agent = require('./utils/requester');
 const chalk = require('chalk');
 const chalkPipe = require('chalk-pipe');
-const chance = require('chance');
+const chance = require('chance').Chance();
 
-
-chance.pickOne['#dd8080', '#ffac63', '#fce95d']
-const header = chalkPipe()
-
+const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
 const signUpQs = [
   {
     type: 'list',
     name: 'role',
-    message: '\n\n' + chalk.magenta('Choose a role:'),
+    message: chalkPipe(chance.pickone(colors))('Choose a role:') + '\n',
     choices: [
       {
         name: 'Admin',
@@ -30,17 +27,17 @@ const signUpQs = [
   {
     type: 'input',
     name: 'name',
-    message: 'Enter your name',
+    message: '\n' + chalkPipe(chance.pickone(colors))('Enter your name'),
   },
   {
     type: 'input',
     name: 'phone',
-    message: 'Enter your phone number',
+    message: chalkPipe(chance.pickone(colors))('Enter your phone number'),
   },
   {
     type: 'password',
     name: 'password',
-    message: 'Choose a password',
+    message: chalkPipe(chance.pickone(colors))('Choose a password'),
   }
 ];
 
@@ -48,12 +45,12 @@ const signInQs = [
   {
     type: 'input',
     name: 'phone',
-    message: 'Phone number',
+    message: '\n' + chalkPipe(chance.pickone(colors))('Phone number'),
   },
   {
     type: 'password',
     name: 'password',
-    message: 'Password',
+    message: chalkPipe(chance.pickone(colors))('Password'),
   }
 ];
 

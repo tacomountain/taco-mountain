@@ -1,6 +1,10 @@
 const inquirer = require('inquirer');
 const agent = require('../../utils/requester');
 const layoutMenu = require('../../utils/layout-menu');
+const chalkPipe = require('chalk-pipe');
+const chance = require('chance').Chance();
+
+const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
 const REQUEST_URL = require('../../utils/request-url');
 
@@ -8,7 +12,7 @@ const addItemQs = [
   {
     type: 'list',
     name: 'type',
-    message: 'What type  item',
+    message: chalkPipe(chance.pickone(colors))('Item type: '),
     choices: [
       {
         name: 'Appetizer',
@@ -27,27 +31,27 @@ const addItemQs = [
   {
     type: 'input',
     name: 'name',
-    message: 'Name of item'
+    message: chalkPipe(chance.pickone(colors))('Name of item: ')
   },
   {
     type: 'number',
     name: 'price',
-    message: 'Set price:'
+    message: chalkPipe(chance.pickone(colors))('Set price: ')
   },
   {
     type: 'number',
     name: 'unitCost',
-    message: 'Unit Cost'
+    message: chalkPipe(chance.pickone(colors))('Unit Cost: ')
   },
   {
     type: 'input',
     name: 'image',
-    message: 'Photo Url'
+    message: chalkPipe(chance.pickone(colors))('Photo Url: ')
   },
   {
     type: 'confirm',
     name: 'confirmation',
-    message: 'Add this item to the menu?'
+    message: chalkPipe(chance.pickone(colors))('Add this item to the menu?: ')
   }
 ];
 
@@ -67,14 +71,14 @@ const removeItemPrompt = async() => {
   const removeItemQs = [
     {
       type: 'checkbox',
-      message: 'Select items to remove from menu',
+      message: chalkPipe(chance.pickone(colors))('Select items to remove from menu'),
       name: 'remove_items',
       choices: await layoutMenu(),
     },
     {
       type: 'confirm',
       name: 'confirmation',
-      message: 'Would you like to remove these item(s)?'
+      message: chalkPipe(chance.pickone(colors))('Would you like to remove these item(s)?')
     }
   ];
 
@@ -94,13 +98,13 @@ const updateItemPrompt = async() => {
   const updateMenuItemQs = [
     {
       type: 'list',
-      message: 'Choose an item to update',
+      message: chalkPipe(chance.pickone(colors))('Choose an item to update'),
       name: 'update_item',
       choices: await layoutMenu(),
     },
     {
       type: 'checkbox',
-      message: 'Fields to update',
+      message: chalkPipe(chance.pickone(colors))('Fields to update'),
       name: 'updateFields',
       choices: [
         {
