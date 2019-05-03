@@ -1,12 +1,17 @@
 const inquirer = require('inquirer');
 const { signInPrompt, signUpPrompt } = require('./inquirer/start');
+const figlet = require('figlet');
+const gradient = require('gradient-string');
+
+
+
 
 
 const startQs = [
   {
     type: 'list',
     name: 'start',
-    message: 'Sign in Or Sign Up',
+    message: '\n\n\n' + gradient.pastel(figlet.textSync('Taco Mountain', { font: 'big' })) + '\n',
     choices: ['Sign In', 'Sign Up']
   }
 ];

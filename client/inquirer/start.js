@@ -3,12 +3,19 @@ const adminMenu = require('./admin/admin-menu');
 const customerMenu = require('./customer/customer-menu');
 const agent = require('./utils/requester');
 const chalk = require('chalk');
+const chalkPipe = require('chalk-pipe');
+const chance = require('chance');
+
+
+chance.pickOne['#dd8080', '#ffac63', '#fce95d']
+const header = chalkPipe()
+
 
 const signUpQs = [
   {
     type: 'list',
     name: 'role',
-    message: 'Choose a role:',
+    message: '\n\n' + chalk.magenta('Choose a role:'),
     choices: [
       {
         name: 'Admin',
