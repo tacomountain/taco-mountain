@@ -11,6 +11,7 @@ function topRewards() {
         console.log('\t', customer.name + ':', chalk.yellow(customer.rewards), chalk.yellow('points'));
       });
     })
+    .catch()
     .then(() => require('./analytics')());
 }
 
@@ -23,6 +24,7 @@ function topSpenders() {
         console.log(customer._id.name + ':', chalk.blue('\n\t\t$') + chalk.blue.bold(customer.totalSpent));
       });
     })
+    .catch()
     .then(() => require('./analytics')());
 }
 
@@ -32,7 +34,6 @@ function popularItems() {
     .then(res => res.body)
     .then(items => {
       items.forEach(item => {
-        // eslint-disable-next-line no-console
         console.log(chalk.yellow(item.name), '\n\t\tPrice: $' + item.price, '\tSold:', item.purchased);
       });
     })
@@ -46,7 +47,6 @@ function profitableItems() {
     .then(res => res.body)
     .then(items => {
       items.forEach(item => {
-        // eslint-disable-next-line no-console
         console.log(chalk.blue(item.item.name), '\n\t\tProfit:', '$' + item.totalProfit.toFixed(2));
       });
     })
@@ -76,19 +76,6 @@ function profitMargin() {
     .then(() => require('./analytics')());
 }
 
-function profitByFood() {
-  return agent()
-    .get('http://localhost:7890/api/v1/orders/profitsByFood')
-    .then(res => res.body)
-    .then(foods => {
-      foods.forEach(food => {
-        console.log(chalk.bold(food.item.name), '\n\t\tProfit Earned: $' + food.totalProfit.toFixed(2));
-      });
-    })
-    .catch()
-    .then(() => require('./analytics')());
-}
-
 function getOrders() {
   return agent()
     .get('http://localhost:7890/api/v1/orders')
@@ -110,4 +97,12 @@ function getOrders() {
     .then(() => require('./analytics')());
 }
 
-module.exports = { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin, profitByFood, getOrders };
+module.exports = {
+  topRewards,
+  topSpenders,
+  popularItems,
+  profitableItems,
+  totalSales,
+  profitMargin,
+  getOrders
+};
