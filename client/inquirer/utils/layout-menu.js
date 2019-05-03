@@ -1,7 +1,7 @@
 const agent = require('./requester');
 const inquirer = require('inquirer');
 
-const REQUEST_URL = require('../utils/request-url');
+const REQUEST_URL = require('./request-url');
 
 module.exports = async() => {
   const foodList = await agent().get(`${REQUEST_URL}/food`);

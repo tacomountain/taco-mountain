@@ -2,7 +2,7 @@
 const chalk = require('chalk');
 const agent = require('../../utils/requester');
 
-const REQUEST_URL = require('../utils/request-url');
+const REQUEST_URL = require('../../utils/request-url');
 
 function topRewards() {
   return agent()

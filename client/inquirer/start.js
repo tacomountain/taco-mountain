@@ -4,7 +4,7 @@ const customerMenu = require('./customer/customer-menu');
 const agent = require('./utils/requester');
 const chalk = require('chalk');
 
-const REQUEST_URL = require('../utils/request-url');
+const REQUEST_URL = require('./utils/request-url');
 
 const signUpQs = [
   {
