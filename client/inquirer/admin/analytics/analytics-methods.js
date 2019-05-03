@@ -2,9 +2,11 @@
 const chalk = require('chalk');
 const agent = require('../../utils/requester');
 
+const REQUEST_URL = require('../utils/request-url');
+
 function topRewards() {
   return agent()
-    .get('http://localhost:7890/api/v1/customers/topRewards')
+    .get(`${REQUEST_URL}/customers/topRewards`)
     .then(res => res.body)
     .then(customers => {
       customers.forEach(customer => {
@@ -16,7 +18,7 @@ function topRewards() {
 
 function topSpenders() {
   return agent()
-    .get('http://localhost:7890/api/v1/customers/topSpenders')
+    .get(`${REQUEST_URL}/customers/topSpenders`)
     .then(res => res.body)
     .then(customers => {
       customers.forEach(customer => {
@@ -28,7 +30,7 @@ function topSpenders() {
 
 function popularItems() {
   return agent()
-    .get('http://localhost:7890/api/v1/orders/topMenuItems')
+    .get(`${REQUEST_URL}/orders/topMenuItems`)
     .then(res => res.body)
     .then(items => {
       items.forEach(item => {
@@ -42,7 +44,7 @@ function popularItems() {
 
 function profitableItems() {
   return agent()
-    .get('http://localhost:7890/api/v1/orders/profitsByFood')
+    .get(`${REQUEST_URL}/orders/profitsByFood`)
     .then(res => res.body)
     .then(items => {
       items.forEach(item => {
@@ -56,7 +58,7 @@ function profitableItems() {
 
 function totalSales() {
   return agent()
-    .get('http://localhost:7890/api/v1/orders/totalSales')
+    .get(`${REQUEST_URL}/orders/totalSales`)
     .then(res => res.body)
     .then(sales => {
       console.log(chalk.bold.red('\t\t$' + sales[0].total));
@@ -67,7 +69,7 @@ function totalSales() {
 
 function profitMargin() {
   return agent()
-    .get('http://localhost:7890/api/v1/orders/totalProfitMargin')
+    .get(`${REQUEST_URL}/orders/totalProfitMargin`)
     .then(res => res.body)
     .then(margin => {
       console.log(chalk.bold.blue('\t\t$' + margin.profit));
@@ -78,7 +80,7 @@ function profitMargin() {
 
 function profitByFood() {
   return agent()
-    .get('http://localhost:7890/api/v1/orders/profitsByFood')
+    .get(`${REQUEST_URL}/orders/profitsByFood`)
     .then(res => res.body)
     .then(foods => {
       foods.forEach(food => {
@@ -91,7 +93,7 @@ function profitByFood() {
 
 function getOrders() {
   return agent()
-    .get('http://localhost:7890/api/v1/orders')
+    .get(`${REQUEST_URL}/orders`)
     .then(res => res.body)
     .then(orders => {
       for(let i = orders.length - 5; i < orders.length; i++) {

@@ -2,6 +2,8 @@ const inquirer = require('inquirer');
 const agent = require('../utils/requester');
 const layoutMenu = require('../utils/layout-menu');
 
+const REQUEST_URL = require('../utils/request-url');
+
 module.exports = async(user) => {
   const customerMenuQ = [
     {
@@ -42,7 +44,7 @@ module.exports = async(user) => {
             .then(({ confirmation }) => {
               if(confirmation) {
                 return agent()
-                  .post('http://localhost:7890/api/v1/orders')
+                  .post(`${REQUEST_URL}/orders`)
                   .send({
                     food: orders,
                     subtotal: subtotal,
