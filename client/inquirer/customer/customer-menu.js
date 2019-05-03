@@ -6,6 +6,8 @@ const chance = require('chance').Chance();
 
 const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
+const REQUEST_URL = require('../utils/request-url');
+
 module.exports = async(user) => {
   const customerMenuQ = [
     {
@@ -46,7 +48,7 @@ module.exports = async(user) => {
             .then(({ confirmation }) => {
               if(confirmation) {
                 return agent()
-                  .post('http://localhost:7890/api/v1/orders')
+                  .post(`${REQUEST_URL}/orders`)
                   .send({
                     food: orders,
                     subtotal: subtotal,
@@ -54,6 +56,7 @@ module.exports = async(user) => {
                     total: total
                   });
               }
+            
             });
         });
     })

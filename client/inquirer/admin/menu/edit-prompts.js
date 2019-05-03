@@ -31,22 +31,22 @@ const addItemQs = [
   {
     type: 'input',
     name: 'name',
-    message: chalkPipe(chance.pickone(colors))('Name of item: ')
+    message: chalkPipe(chance.pickone(colors))('Name of item:')
   },
   {
     type: 'number',
     name: 'price',
-    message: chalkPipe(chance.pickone(colors))('Set price: ')
+    message: chalkPipe(chance.pickone(colors))('Set price:')
   },
   {
     type: 'number',
     name: 'unitCost',
-    message: chalkPipe(chance.pickone(colors))('Unit Cost: ')
+    message: chalkPipe(chance.pickone(colors))('Unit Cost:')
   },
   {
     type: 'input',
     name: 'image',
-    message: chalkPipe(chance.pickone(colors))('Photo Url: ')
+    message: chalkPipe(chance.pickone(colors))('Photo Url:')
   },
   {
     type: 'confirm',
@@ -88,14 +88,15 @@ const removeItemPrompt = async() => {
         const idsToDelete = remove_items.map(item => item._id);
         return Promise.all(idsToDelete.map(id => agent().delete(`${REQUEST_URL}/food/${id}`)))
           .then(() => remove_items.map(item => item.name))
-          .then(removedItemNames => console.log(`You've removed ${removedItemNames.join(', ')}`));
+          // eslint-disable-next-line no-console
+          .then(removedItemNames => console.log(`You've removed ${removedItemNames.join(', ')}.`));
       }
     })
     .then(() => require('./edit-menu')());
 };
 
 const updateItemPrompt = async() => {
-  const updateMenuItemQs = [
+  const updateItemQs = [
     {
       type: 'list',
       message: chalkPipe(chance.pickone(colors))('Choose an item to update'),
@@ -104,7 +105,7 @@ const updateItemPrompt = async() => {
     },
     {
       type: 'checkbox',
-      message: chalkPipe(chance.pickone(colors))('Fields to update'),
+      message: chalkPipe(chance.pickone(colors))('Fields to update?'),
       name: 'updateFields',
       choices: [
         {
@@ -123,20 +124,30 @@ const updateItemPrompt = async() => {
     }
   ];
 
-  return inquirer.prompt(updateMenuItemQs)
+  return inquirer.prompt(updateItemQs)
     .then(({ update_item, updateFields }) => {
-      const fieldUpdateQs = updateFields.map(field => ({
-        type: field === 'image' ? 'input' : 'number',
-        message: `Update ${field}`,
-        name: field
-      }));
+      const updateFieldQs = [
+        ...updateFields.map(field => ({
+          type: field === 'image' ? 'input' : 'number',
+          message: `Update ${field}:`,
+          name: field
+        })),
+        {
+          type: 'confirm',
+          name: 'confirmation',
+          message: 'Would you like to update this item?'
+        }
+      ];
 
-      return inquirer.prompt(fieldUpdateQs)
-        .then(answers => {
-          return agent()
-            .patch(`${REQUEST_URL}/food/${update_item._id}`)
-            .send(answers)
-            .then(() => console.log(`You've updated ${update_item.name}`));
+      return inquirer.prompt(updateFieldQs)
+        .then(({ confirmation, ...answers }) => {
+          if(confirmation) { 
+            return agent()
+              .patch(`${REQUEST_URL}/food/${update_item._id}`)
+              .send(answers)
+              // eslint-disable-next-line no-console
+              .then(() => console.log(`You've updated ${update_item.name}.`));
+          }
         });
     })
     .then(() => require('./edit-menu')());

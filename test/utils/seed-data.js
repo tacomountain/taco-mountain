@@ -51,19 +51,26 @@ function handleFoodType(type) {
 async function seedOrders(orderCount = 100) {
   const customers = await seedCustomers();
   const food = await seedFood();
-  const orders = [...Array(orderCount)].map(() => ({
-    customer: chance.pickone(customers)._id,
-    food: [
-      { foodId: chance.pickone(food)._id, name: chance.pickone(food).name, purchasePrice: chance.pickone(food).price },
-      { foodId: chance.pickone(food)._id, name: chance.pickone(food).name, purchasePrice: chance.pickone(food).price },
-      { foodId: chance.pickone(food)._id, name: chance.pickone(food).name, purchasePrice: chance.pickone(food).price }
-    ],
+  const orders = [...Array(orderCount)].map(() => {
+    const foodOrder = [...Array(chance.natural({ min: 1, max: 6 }))].map(() => {
+      const randomFood = chance.pickone(food);
+      return {
+        foodId: randomFood._id, name: randomFood.name, purchasePrice: randomFood.price
+      };
+    });
 
-    subtotal: chance.integer({ min: 0, max: 100 }),
-    tip: chance.integer({ min: 0, max: 10 }),
-    total: chance.integer({ min: 0, max: 150 })
-
-  }));
+    return {
+      customer: chance.pickone(customers)._id,
+      food: foodOrder,
+      get subtotal() {
+        return this.food.reduce((acc, cur) => acc + cur.purchasePrice, 0);
+      },
+      tip: chance.integer({ min: 0, max: 5 }),
+      get total() {
+        return this.subtotal + this.tip;
+      }
+    };
+  });
   return Order.create(orders);
 }
 

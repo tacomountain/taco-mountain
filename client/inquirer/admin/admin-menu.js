@@ -7,20 +7,20 @@ const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae'
 var adminTasks = [
   {
     type: 'list',
-    name: 'adminTask',
+    name: 'task',
     message: chalkPipe(chance.pickone(colors))('What will you do?'),
-    choices: ['Edit Menu', 'Analytics']
+    choices: ['Edit Menu', 'Analytics', 'Sign Out' ]
   }
 ];
 
-module.exports = () => inquirer.prompt(adminTasks).then(task => {
-  switch(task.adminTask) {
+module.exports = () => inquirer.prompt(adminTasks).then(({ task }) => {
+  switch(task) {
     case 'Edit Menu':
-      require('./menu/edit-menu')();
-      break;
+      return require('./menu/edit-menu')();
     case 'Analytics':
-      require('./analytics/analytics')();
-      break;
+      return require('./analytics/analytics')();
+    case 'Sign Out':
+      // eslint-disable-next-line no-console
+      return console.log('You are signed out.');
   }
 });
-

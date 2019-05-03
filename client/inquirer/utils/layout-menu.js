@@ -6,7 +6,7 @@ const figlet = require('figlet');
 
 const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
-const REQUEST_URL = require('../utils/request-url');
+const REQUEST_URL = require('./request-url');
 
 module.exports = async() => {
   const foodList = await agent().get(`${REQUEST_URL}/food`);

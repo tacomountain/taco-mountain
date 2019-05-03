@@ -2,7 +2,15 @@ const inquirer = require('inquirer');
 const adminMenu = require('../admin-menu');
 const chalkPipe = require('chalk-pipe');
 const chance = require('chance').Chance();
-const { topRewards, topSpenders, popularItems, profitableItems, totalSales, profitMargin, profitByFood, getOrders } = require('./analytics-methods');
+const {
+  topRewards,
+  topSpenders,
+  popularItems,
+  profitableItems,
+  totalSales,
+  profitMargin,
+  getOrders
+} = require('./analytics-methods');
 
 const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
@@ -18,8 +26,7 @@ const aggregationQs = [
       'Most popular menu items',
       'Most profitable menu items',
       'Total Sales',
-      'Total Profit Margin on Menu Items',
-      'Profit by Menu Item',
+      'Profit Margin on Menu Items',
       chalkPipe('yellow')('Back to Admin')
     ]
   }
@@ -28,31 +35,20 @@ const aggregationQs = [
 module.exports = () => inquirer.prompt(aggregationQs).then(choice => {
   switch(choice.aggregation) {
     case 'Customers with the most rewards':
-      topRewards();
-      break;
+      return topRewards();
     case 'Customers who have spent the most':
-      topSpenders();
-      break;
+      return topSpenders();
     case 'Most popular menu items':
-      popularItems();
-      break;
+      return popularItems();
     case 'Most profitable menu items':
-      profitableItems();
-      break;
+      return profitableItems();
     case 'Total Sales':
-      totalSales();
-      break;
-    case 'Total Profit Margin on Menu Items':
-      profitMargin();
-      break;
-    case 'Profit by Menu Item':
-      profitByFood();
-      break;
+      return totalSales();
+    case 'Profit Margin on Menu Items':
+      return profitMargin();
     case 'Get most recent orders':
-      getOrders();
-      break;
+      return getOrders();
     case 'Back to Admin':
-      adminMenu();
-      break;
+      return adminMenu();
   }
 });
