@@ -9,7 +9,7 @@ var adminTasks = [
     type: 'list',
     name: 'task',
     message: chalkPipe(chance.pickone(colors))('What will you do?'),
-    choices: ['Edit Menu', 'Analytics', 'Sign Out' ]
+    choices: ['Edit Menu', 'Analytics', 'Sign Out']
   }
 ];
 
