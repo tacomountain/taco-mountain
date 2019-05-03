@@ -1,5 +1,7 @@
 const inquirer = require('inquirer');
 const adminMenu = require('../admin-menu');
+const chalkPipe = require('chalk-pipe');
+const chance = require('chance').Chance();
 const {
   topRewards,
   topSpenders,
@@ -10,11 +12,13 @@ const {
   getOrders
 } = require('./analytics-methods');
 
+const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
+
 const aggregationQs = [
   {
     type: 'list',
     name: 'aggregation',
-    message: 'Find:',
+    message: chalkPipe(chance.pickone(colors))('Find: '),
     choices: [
       'Customers with the most rewards',
       'Customers who have spent the most',
@@ -23,7 +27,7 @@ const aggregationQs = [
       'Most profitable menu items',
       'Total Sales',
       'Profit Margin on Menu Items',
-      'Back to Admin'
+      chalkPipe('yellow')('Back to Admin')
     ]
   }
 ];

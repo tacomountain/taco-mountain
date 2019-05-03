@@ -1,5 +1,10 @@
 const agent = require('./requester');
 const inquirer = require('inquirer');
+const chalkPipe = require('chalk-pipe');
+const chance = require('chance').Chance();
+const figlet = require('figlet');
+
+const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
 const REQUEST_URL = require('./request-url');
 
@@ -20,8 +25,8 @@ module.exports = async() => {
   const drinkList = filterFoodList('drink');
 
   return [
-    new inquirer.Separator('APPETIZERS'), ...appetizerList,
-    new inquirer.Separator('ENTREES'), ...entreeList,
-    new inquirer.Separator('DRINKS'), ...drinkList
+    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))(figlet.textSync('DRINKS', { font: 'Mini' }))), ...drinkList,
+    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))(figlet.textSync('APPETIZERS', { font: 'Mini' }))), ...appetizerList,
+    new inquirer.Separator('\n' + chalkPipe(chance.pickone(colors))(figlet.textSync('ENTREES', { font: 'Mini' }))), ...entreeList
   ];
 };

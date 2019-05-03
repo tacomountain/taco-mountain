@@ -1,6 +1,10 @@
 const inquirer = require('inquirer');
 const agent = require('../utils/requester');
 const layoutMenu = require('../utils/layout-menu');
+const chalkPipe = require('chalk-pipe');
+const chance = require('chance').Chance();
+
+const colors = ['#dd8080', '#ffac63', '#fce95d', '#c7fc5d', '#9dff7a', '#89ffae', '#9082ff', '#b266ff', '#fa84ff', '#ff5e5e'];
 
 const REQUEST_URL = require('../utils/request-url');
 
@@ -8,7 +12,7 @@ module.exports = async(user) => {
   const customerMenuQ = [
     {
       type: 'checkbox',
-      message: `\nWelcome to Taco Mountain, ${user.name}. \nYou have ${user.profile.rewards} rewards points. \nWhat would you like to order?`,
+      message: '\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n\n' + chalkPipe(chance.pickone(colors))(`Welcome to Taco Mountain ${user.name}.`) + chalkPipe(chance.pickone(colors))(`You have ${user.profile.rewards} rewards points.`) + '\n\n' + chalkPipe(chance.pickone(colors))('What would you like to order?') + '\n',
       name: 'order',
       choices: await layoutMenu(),
     }
@@ -27,7 +31,7 @@ module.exports = async(user) => {
       const tipQ = {
         type: 'number',
         name: 'tip',
-        message: `Your order subtotal is $${subtotal.toFixed(2)}. How much would you like to tip?`
+        message: chalkPipe(chance.pickone(colors))(`Your order subtotal is $${subtotal.toFixed(2)}. How much would you like to tip?`)
       };
 
       return inquirer.prompt(tipQ)
@@ -37,7 +41,7 @@ module.exports = async(user) => {
           const confirmQ = {
             type: 'confirm',
             name: 'confirmation',
-            message: `Your total is $${total.toFixed(2)}. Would you like to place this order?`
+            message: chalkPipe(chance.pickone(colors))(`Your total is $${total.toFixed(2)}. Would you like to place this order?`)
           };
 
           return inquirer.prompt(confirmQ)
@@ -56,5 +60,5 @@ module.exports = async(user) => {
             });
         });
     })
-    .then(() => console.log('Thank you for coming to Taco Mountain!'));
+    .then(() => console.log(chalkPipe(chance.pickone(colors))('\n\nYour food will be out shortly. Thank you for coming to Taco Mountain!')));
 };
