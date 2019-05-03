@@ -8,7 +8,7 @@ const signUpQs = [
   {
     type: 'list',
     name: 'role',
-    message: 'Choose a role:',
+    message: 'Choose a role: ',
     choices: [
       {
         name: 'Admin',
@@ -23,17 +23,17 @@ const signUpQs = [
   {
     type: 'input',
     name: 'name',
-    message: 'Enter your name',
+    message: 'Enter your name:',
   },
   {
     type: 'input',
     name: 'phone',
-    message: 'Enter your phone number',
+    message: 'Enter your phone number:',
   },
   {
     type: 'password',
     name: 'password',
-    message: 'Choose a password',
+    message: 'Enter a password:',
   }
 ];
 
@@ -41,12 +41,12 @@ const signInQs = [
   {
     type: 'input',
     name: 'phone',
-    message: 'Phone number',
+    message: 'Enter your phone number:',
   },
   {
     type: 'password',
     name: 'password',
-    message: 'Password',
+    message: 'Enter your password:',
   }
 ];
 
@@ -61,33 +61,32 @@ function handleRole(user) {
 
 const signInPrompt = () =>
   inquirer.prompt(signInQs)
-    .then(answers => 
-      agent()
+    .then(answers => {
+      return agent()
         .post('http://localhost:7890/api/v1/auth/signin')
         .send(answers)
         .then(res => {
           if(res.body.status === 401) {
             // eslint-disable-next-line no-console
-            console.log(chalk.red('invalid authorization'));
-            require('../client')();
+            console.log(chalk.red('Invalid authorization'));
+            return require('../client')();
           }
-          handleRole(res.body);
+          return handleRole(res.body);
         })
-    );
+    });
     
 const signUpPrompt = () =>
   inquirer.prompt(signUpQs)
-    .then(({ role, name, phone, password }) =>
-    {
+    .then(({ role, name, phone, password }) => {
       if(!phone.match(/\d{10}/)) {
+        // eslint-disable-next-line no-console
         console.log(chalk.red('Phone number must match regular expression /\\d{10}/'));
         return require('../client')();
       }
-      agent()
+      return agent()
         .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
         .send({ name, password, phone })
         .then(res => handleRole(res.body));
-    }
-    );
+    });
 
 module.exports = { signInPrompt, signUpPrompt };
