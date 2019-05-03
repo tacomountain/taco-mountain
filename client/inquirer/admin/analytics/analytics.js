@@ -14,8 +14,8 @@ const aggregationQs = [
       'Most popular menu items',
       'Most profitable menu items',
       'Total Sales',
-      'Total Profit Margin on Menu Items',
-      'Profit by Menu Item',
+      'Profit Margin on Menu Items',
+      // 'Profit by Menu Item', ** redundant with above
       'Back to Admin'
     ]
   }
@@ -38,7 +38,7 @@ module.exports = () => inquirer.prompt(aggregationQs).then(choice => {
     case 'Total Sales':
       totalSales();
       break;
-    case 'Total Profit Margin on Menu Items':
+    case 'Profit Margin on Menu Items':
       profitMargin();
       break;
     case 'Profit by Menu Item':

@@ -6,7 +6,7 @@ module.exports = async(user) => {
   const customerMenuQ = [
     {
       type: 'checkbox',
-      message: `Welcome to Taco Mountain ${user.name}. You have ${user.profile.rewards} rewards points. What would you like to order?`,
+      message: `\nWelcome to Taco Mountain, ${user.name}. \nYou have ${user.profile.rewards} rewards points. \nWhat would you like to order?`,
       name: 'order',
       choices: await layoutMenu(),
     }
