@@ -78,22 +78,6 @@ function profitMargin() {
     .then(() => require('./analytics')());
 }
 
-<<<<<<< HEAD
-function profitByFood() {
-  return agent()
-    .get(`${REQUEST_URL}/orders/profitsByFood`)
-    .then(res => res.body)
-    .then(foods => {
-      foods.forEach(food => {
-        console.log(chalk.bold(food.item.name), '\n\t\tProfit Earned: $' + food.totalProfit.toFixed(2));
-      });
-    })
-    .catch()
-    .then(() => require('./analytics')());
-}
-
-=======
->>>>>>> c706f97570980e801703a75613b238e30f61a04d
 function getOrders() {
   return agent()
     .get(`${REQUEST_URL}/orders`)

@@ -1,7 +1,6 @@
 const inquirer = require('inquirer');
 const { signInPrompt, signUpPrompt } = require('./inquirer/start');
 
-
 const startQs = [
   {
     type: 'list',

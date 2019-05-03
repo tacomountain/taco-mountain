@@ -4,6 +4,8 @@ const customerMenu = require('./customer/customer-menu');
 const agent = require('./utils/requester');
 const chalk = require('chalk');
 
+const REQUEST_URL = require('../utils/request-url');
+
 const signUpQs = [
   {
     type: 'list',
@@ -63,7 +65,7 @@ const signInPrompt = () =>
   inquirer.prompt(signInQs)
     .then(answers => {
       return agent()
-        .post('http://localhost:7890/api/v1/auth/signin')
+        .post(`${REQUEST_URL}/auth/signin`)
         .send(answers)
         .then(res => {
           if(res.body.status === 401) {
@@ -72,7 +74,7 @@ const signInPrompt = () =>
             return require('../client')();
           }
           return handleRole(res.body);
-        })
+        });
     });
     
 const signUpPrompt = () =>
@@ -84,7 +86,7 @@ const signUpPrompt = () =>
         return require('../client')();
       }
       return agent()
-        .post(`http://localhost:7890/api/v1/auth/signup/${role}`)
+        .post(`${REQUEST_URL}/auth/signup/${role}`)
         .send({ name, password, phone })
         .then(res => handleRole(res.body));
     });
